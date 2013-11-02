@@ -1,0 +1,417 @@
+/* CSS Document */
+.banner{
+	float:left;
+	width:1200px;
+	height:200px;
+	border:1px solid #CCC;	
+}
+
+.cuerpo{
+	float:left;
+	width:1200px;
+	height:auto;
+	min-height:710px;
+	/*min-height:600px;*/
+	border:1px solid #CCC;
+	border-top:0px;
+	padding-bottom:5px;		
+}
+
+.menu{
+	float:left;
+	width:255px;
+	height:auto;
+	margin:5px;
+}
+
+
+
+.pie{
+	float:left;
+	width:1200px;
+	height:50px;
+	border:1px solid #CCC;	
+	border-top:0px;
+	margin-bottom:200px;		
+}
+
+
+.tabla-titulo{
+	padding-left:5px;
+    float:left;
+	width:920px;
+	height:30px;
+	background:#61380a;
+	border:1px solid #21A010;
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
+	color:#FFF;
+	line-height:30px;
+	font-size:14px;	
+	border-color: #0b67cd;		
+	background:#0b67cd;
+	margin:5px;
+	margin-left:3px;
+}
+
+
+
+.detalle-linea{
+	float:left;
+	width:909px;
+	margin:5px;
+	margin-top:10px;
+	height:37px;
+}
+
+.detalle-indica{
+	float:left;
+	width:890px;
+	margin:5px;
+	margin-top:0px;
+	height:15px;
+	margin-left:15px;
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#333;		
+	/*background:#999;*/
+}
+
+.detalle-linea-elemento{
+	float:left;
+	width:120px;
+	margin-left:10px;
+	height:37px;	
+}
+
+.detalle-linea-elemento-arriba{
+	float:left;
+	width:120px;
+	height:15px;	
+    line-height:15px;
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#333;		
+}
+
+.detalle-linea-elemento-abajo{
+	float:left;
+	width:120px;
+	height:20px;	
+}
+
+.entrada{	
+	margin:0px;
+	width:118px;	
+	padding-left:2px;
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
+	font-size:12px;
+	color:#666;
+	height:21px;
+	margin-top:2px;	
+	-webkit-border-radius: 3px;
+    -moz-border-radius:3px;
+    border: 1px solid #BDC2C9;
+	background:#FFF;		
+}
+
+.ui-dialog .ui-dialog-title {
+	float: left;
+	margin: .1em 0;
+	white-space: nowrap;
+	width: 90%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-size:12px;	
+}
+
+
+
+.campo_filtro{
+	height:14px; 
+	width:200px; 
+	height:20px;
+	padding-left:2px; 
+	font-size:12px;
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;	
+	color:#666;		
+	float:right;
+	margin-top:2px;
+}
+
+.select_filtro{
+	font-size:12px;
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
+	color:#666;
+	float:right;
+	border:1px solid #CCC;	
+}
+
+.filter{
+	float:right;
+	width:19px;
+	height:19px;
+	/*background:#333;*/
+	margin-top:2px;
+	margin-left:2px;	
+	cursor:pointer;
+}
+
+.ui-button-text-only .ui-button-text{
+  font-size:10px;	
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;  
+}
+
+.calendario{
+	float:left;
+	width:540px;
+	margin-left:3px;
+	margin-bottom:5px;	
+}
+
+.resumenproduccion{
+	position:absolute;
+	width:300px;
+	height:104px;
+	border:1px solid #CCC;
+	margin-left:5px;
+	margin-bottom:5px;
+	margin-top:-112px;
+	margin-left:550px;	
+}
+
+.opcionresumenproduccion{
+	float:left;
+	width:99px;
+	height:104px;
+	border-right:1px solid #CCC;
+}
+
+.arribaresumen{
+	float:left;
+	width:99px;
+	height:52px;
+	border-bottom:1px solid #CCC;
+}
+
+.abajoresumen{
+	float:left;
+	width:99px;
+	height:52px;	
+}
+
+.numero_resumen{
+	float:left;
+	width:99px;
+	height:32px;
+	line-height:32px;
+	font-size:20px;
+	text-align:center;
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif; 		
+	color:#333;
+}
+
+.titulo_resumen{
+	float:left;	
+	width:99px;
+	height:20px;
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif; 		
+	color:#333;
+	text-align:center;
+	font-size:11px;	
+}
+
+
+.numero_resumengran{
+	float:left;
+	width:99px;
+	height:60px;
+	line-height:60px;
+	font-size:28px;
+	text-align:center;
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif; 		
+	color:#333;
+}
+
+.titulo_resumengran{
+	float:left;	
+	width:99px;
+	height:39px;
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif; 		
+	color:#333;
+	text-align:center;
+	font-size:12px;	
+}
+
+.boton_cargar{
+	float:left;
+	width:68px;
+	height:23px;
+	/*border:1px solid #CCC;*/
+	margin-left:310px;
+	margin-bottom:5px;	
+}
+
+.boton_guardar{
+	position:absolute;
+	width:68px;
+	height:23px;
+	/*border:1px solid #CCC;*/
+	margin-left:1124px;
+	margin-top:73px;
+	margin-bottom:5px;	
+}
+
+.detalleviaje{
+	float:right;
+	width:373px;
+	height:75px;
+	border:1px solid #CCC;
+	margin-right:5px;
+	margin-bottom:5px;	
+	margin-top:-80px;
+}
+
+.conte_detalle{
+	float:left;
+	width:73px;
+	height:75px;
+	border-right:1px solid #CCC;	
+}
+
+.conte_detalle_numero{
+	float:left;
+	width:73px;
+	height:50px;
+	line-height:50px;
+	font-family: 'Oswald', sans-serif;
+	text-align:center;
+	font-size:18px;
+	color:#666;
+}
+
+.conte_detalle_describe{
+	float:left;
+	width:73px;
+	height:25px;
+	line-height:12px;
+	font-family: 'Oswald', sans-serif;
+	text-align:center;
+	font-size:11px;
+	color:#666;
+}
+
+.subtitulo{
+    float:left;
+	margin:5px;
+	width:917px;
+	height:20px;
+	margin-left:270px;
+	margin-top:0px;	
+	background:#0b67cd;
+	border:1px solid #0b67cd;
+	line-height:20px;
+	color:#FFF;
+	font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif; 
+	font-size:12px;
+	padding-left:5px;
+}
+
+.subcomponente{
+    float:left;
+	margin:5px;
+	width:917px;
+	height:auto;
+	margin-left:270px;
+	margin-top:0px;	
+	border:1px solid #CCC;	
+	padding-left:5px;
+	padding-bottom:5px;
+}
+
+.subconte{
+	float:left;	
+	width:147px;
+	height:35px;
+	/*border:1px solid #CCC;*/	
+	margin-top:5px;
+	margin-right:5px;
+}
+
+.subcontearriba{
+    float:left;
+	width:147px;
+	height:15px;
+	line-height:15px;
+	font-family: 'Oswald', sans-serif;	
+	font-size:12px;
+	color:#333;
+}
+
+.subconteabajo{
+    float:left;
+	width:147px;
+	height:20px;
+}
+
+.subentrada{
+	position:absolute;
+	margin:0px;
+	width:147px;
+	font-size:12px;	
+}
+
+.tablaproductores{
+	float:left;
+	margin:0px;	
+	border-collapse: collapse;
+	margin-left:270px;
+	margin-bottom:5px;
+	border:1px solid #999;
+}
+
+.celda_cabecera{
+	padding-left:5px;
+	padding-right:5px;
+	text-align:center;	
+}
+
+.conte_agregar{
+	float:left;
+	margin-left:270px;
+	/*border:1px solid #CCC;*/
+	width:365px;
+	height:25px;
+	margin-bottom:5px;
+}
+
+.entrada_tabla{
+	width:68px;
+	margin:0px;
+	float:left;
+	border:0px;	
+}
+
+
+.columna{
+	float:left;
+	width:100px;
+	height:20px;
+	padding-left:5px;
+	border:1px solid #CCC;	
+	font-size:12px;
+	line-height:20px;
+	font-family: 'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;	
+	color:#666;	
+}
+
+.entrada_columna{
+	position:absolute;
+	height:20px;
+	margin-left:-5px;
+	border:0px;	
+	text-align:right;
+	padding-right:5px;
+	font-family: 'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;	
+	color:#666;	
+}
+
