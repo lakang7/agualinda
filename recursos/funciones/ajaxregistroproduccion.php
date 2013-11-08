@@ -5,26 +5,57 @@
 		$categorias="select * from tipoproducto order by idtipoproducto;";
 		$result_categorias= pg_exec($con,$categorias);
 		
-		        echo "<div class='resumenproduccion'>";
+		        $sql_inventarioLeche=" select * from inventarioleche where fecha='".$_POST["fecha"]."'; ";
+				$result_inventarioLeche=pg_exec($con,$sql_inventarioLeche);
+				if(pg_num_rows($result_inventarioLeche)==0){
+		       
+			    echo "<div class='resumenproduccion'>";
 		       	echo "<div class='opcionresumenproduccion'>";
-		        echo "<div class='numero_resumengran'>9650</div>";
+		        echo "<div class='numero_resumengran'>------</div>";
 		        echo "<div class='titulo_resumengran'>Leche Inicial En Los Silos </div>";
 		        echo "</div>";
 		        echo "<div class='opcionresumenproduccion'>";
 			    echo "<div class='arribaresumen'>";
-		        echo "<div class='numero_resumen'>12000</div>";
+		        echo "<div class='numero_resumen'>------</div>";
 		        echo "<div class='titulo_resumen'>Litros Recibidos</div>";
 		        echo "</div>";
 		        echo "<div class='abajoresumen'>";
-		        echo "<div class='numero_resumen'>8954</div>";
+		        echo "<div class='numero_resumen'>------</div>";
 		        echo "<div class='titulo_resumen'>Litros Trabajados</div>";
 		        echo "</div>";
 		        echo "</div>";
 		        echo "<div class='opcionresumenproduccion' style='border-right:0px;'>";
-		        echo "<div class='numero_resumengran'>3400</div>";
+		        echo "<div class='numero_resumengran'>------</div>";
 		        echo "<div class='titulo_resumengran'>Leche Final En Los Silos</div>";
 		        echo "</div>";
-		        echo "</div>";		
+		        echo "</div>";						
+				
+				}else{
+		        $inventarioLeche=pg_fetch_array($result_inventarioLeche,0);								
+				echo "<div class='resumenproduccion'>";
+		       	echo "<div class='opcionresumenproduccion'>";
+		        echo "<div class='numero_resumengran'>".$inventarioLeche[2]."</div>";
+		        echo "<div class='titulo_resumengran'>Leche Inicial En Los Silos </div>";
+		        echo "</div>";
+		        echo "<div class='opcionresumenproduccion'>";
+			    echo "<div class='arribaresumen'>";
+		        echo "<div class='numero_resumen'>".$inventarioLeche[3]."</div>";
+		        echo "<div class='titulo_resumen'>Litros Recibidos</div>";
+		        echo "</div>";
+		        echo "<div class='abajoresumen'>";
+		        echo "<div class='numero_resumen'>".$inventarioLeche[4]."</div>";
+		        echo "<div class='titulo_resumen'>Litros Trabajados</div>";
+		        echo "</div>";
+		        echo "</div>";
+		        echo "<div class='opcionresumenproduccion' style='border-right:0px;'>";
+		        echo "<div class='numero_resumengran'>".$inventarioLeche[7]."</div>";
+		        echo "<div class='titulo_resumengran'>Leche Final En Los Silos</div>";
+		        echo "</div>";
+		        echo "</div>";						
+					
+				}
+				
+	
 		
 		
 		$listacategoriasgeneransuero="";
@@ -150,8 +181,9 @@
 				}																												
 					}													
 				
-				echo "<input type='hidden' name='lista".$categoria[0]."' id='lista".$categoria[0]."' value='".$lista_productos."' />";																			
-			}																			
+																							
+			}
+			echo "<input type='hidden' name='lista".$categoria[0]."' id='lista".$categoria[0]."' value='".$lista_productos."' />";																			
 		}	
 		echo "<input type='hidden' name='generansuero' id='generansuero' value='".$listacategoriasgeneransuero."' />";
 		echo "<input type='hidden' name='usasuero' id='usasuero' value='".$categoria_usa_suero."' />";
@@ -372,8 +404,7 @@
 		}
 		
 		/*En este punto ya el dia esta registrado en la tabla de inventarios cualquiera que fuese el caso*/
-		
-		
+				
 		$sql_productosElaborados=" select produccion.fecha, productosenproduccion.idproducto, productosenproduccion.unidades, productosenproduccion.kilogramos, productosenproduccion.kilogramosxunidad from productosenproduccion, produccion where productosenproduccion.idproduccion = produccion.idproduccion and produccion.fecha='".$_POST["fecha"]."';";
 		$result_productosElaborados=pg_exec($con,$sql_productosElaborados);
 		for($i=0;$i<pg_num_rows($result_productosElaborados);$i++){
@@ -397,17 +428,76 @@
 				}
 					
 			}			
-			
-			
+						
 		}
 		
-
 		
-				
-		
-		
+	/*Cuento toda la leche procesada durante este dia*/
+	$LitrosTrabajados=0;
+	$sql_produccionFecha="select * from produccion where fecha='".$_POST["fecha"]."';";		
+	$result_produccionFecha=pg_exec($con,$sql_produccionFecha);
+	for($i=0;$i<pg_num_rows($result_produccionFecha);$i++){
+		$produccion=pg_fetch_array($result_produccionFecha,$i);
+		$sql_tipoProduccion="select * from tipoproducto where idtipoproducto=".$produccion[1]."";
+		$result_tipoProduccion=pg_exec($con,$sql_tipoProduccion);
+		$tipoProduccion=pg_fetch_array($result_tipoProduccion,0);
+		if($tipoProduccion[5]==1 || $tipoProduccion[5]==3){
+			$LitrosTrabajados+=$produccion[3];	
+		}
 		
 	}
 	
+	$sql_diaRegistrado="select * from inventarioleche where fecha='".$_POST["fecha"]."';";
+	$result_diaRegistrado=pg_exec($con,$sql_diaRegistrado);		
+		
+	if(pg_num_rows($result_diaRegistrado)==0){/*El dia no esta registrado en la tabla*/
+		$sql_ultimo_dia="select fecha from inventarioleche order by fecha DESC;";
+		$result_ultimo_dia=pg_exec($con,$sql_ultimo_dia);
+		$ultimodia=pg_fetch_array($result_ultimo_dia,0);			
+		$fechaInicio=strtotime($ultimodia[0]);
+		$fechaFin=strtotime($_POST["fecha"]);
+		/*Recorro los dias desde el ultimo registrado al que estoy registrando*/			
+		for($i=($fechaInicio+86400);($i<=$fechaFin);$i+=86400){
+			$diaAtras=($i-86400);
+			$sql_diaAnterior="select * from inventarioleche where fecha='".date("Y-m-d",$diaAtras)."';";
+			$result_diaAnterior=pg_exec($con,$sql_diaAnterior);
+			$diaAnterior=pg_fetch_array($result_diaAnterior,0);
+								
+			$sql_insertDiaNuevo=" insert into inventarioleche values(nextval('inventarioleche_idinventarioleche_seq'),'".date("Y-m-d",$i)."',".$diaAnterior[7].",0,0,0,0,".$diaAnterior[7].")";
+			$result_insertDiaNuevo=pg_exec($con,$sql_insertDiaNuevo);				
+		}
+	}
+		
+	/*En este punto el dia ya se encuentra registrado en la base datos*/	
+	$sql_diaseditados="select * from inventarioleche where fecha >='".$_POST["fecha"]."' order by fecha;";
+	$result_diaseditados=pg_exec($con,$sql_diaseditados);
+	for($j=0;$j<pg_num_rows($result_diaseditados);$j++){
+		$diaEditado=pg_fetch_array($result_diaseditados,$j);
+		if($j==0){
+							
+			$sql_updateDia="update inventarioleche set trabajada=".$LitrosTrabajados.", final=".(($diaEditado[2]+$diaEditado[3])-($LitrosTrabajados+$diaEditado[5]+$diaEditado[6]))." where idinventarioleche=".$diaEditado[0].";";
+			$result_updateDia=pg_exec($con,$sql_updateDia);
 				
+		}else if($j>0){
+				
+			$indiceAnterior=pg_fetch_array($result_diaseditados,($j-1));
+			$sql_diaAnterior="select * from inventarioleche where idinventarioleche='".$indiceAnterior[0]."';";
+			$result_diaAnterior=pg_exec($con,$sql_diaAnterior);
+			$diaAnterior=pg_fetch_array($result_diaAnterior,0);
+			$sql_updateDia="update inventarioleche set inicial=".$diaAnterior[7].", final=".(($diaAnterior[7]+$diaEditado[3])-($diaEditado[4]+$diaEditado[5]+$diaEditado[6]))." where idinventarioleche=".$diaEditado[0].";";					
+			$result_updateDia=pg_exec($con,$sql_updateDia);				
+		}
+	}	
+
+
+	  ?>
+      	<script type="text/javascript" language="javascript">		 
+		    alert("Produccion Registrada satisfactoriamente.");    
+			location.href="../../sistema/RegistroDeProduccionDiaria.php";
+        </script>
+      <?					
+		
+		
+		
+	}					
 ?>

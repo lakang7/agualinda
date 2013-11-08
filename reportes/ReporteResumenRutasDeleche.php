@@ -214,7 +214,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Resume Semanal Rutas De Leche</title>
+<title>Resume Semanal Rutas y Productores</title>
 </head>
 
 <body onload="inicializa_resumen_ruta()">
@@ -224,7 +224,7 @@
 	</div>
     <div class="barra2">
     	<div class="barra2_flecha"></div>                
-        <div class="barra2_pantalla">Resume Semanal Rutas De Leche</div>
+        <div class="barra2_pantalla">Resume Semanal Rutas y Productores</div>
     </div>
     <div class="menu" id="menu">
     	<?php menu_interno(); ?>
@@ -234,7 +234,7 @@
 	<div class="reporte_leche" id="reporte_leche"  >
 		
         <input type="hidden" name="semana_leche" id="semana_leche" value="<?php echo PedirSemana(); ?>" />
-        <div class="Reporte-titulo">Resumen Semanal Rutas de Transporte</div>
+        <div class="Reporte-titulo">Resumen Semanal Rutas y Productores</div>
 <div class="Reporte-fecha"><label><?php echo FormatoSemana(PedirSemana()); ?></label>
         	<div class="Reporte-flecha_izq" onclick="atras_resumen_ruta()"><img src="../recursos/imagenes/prev.png" style="margin-left:2px; margin-top:7px;" width="6" height="10" /></div>
             <div class="Reporte-flecha_der" onclick="adelante_resumen_ruta()"><img src="../recursos/imagenes/next.png" style="margin-right:2px; margin-top:7px;" width="6" height="10" /></div>

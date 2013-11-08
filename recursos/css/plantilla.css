@@ -1,10 +1,15 @@
 /* CSS Document */
 
     /*Diagramación de la plantilla*/
+	html{
+		height:auto;
+		margin:0px;	
+	}
 	body{
 		padding:0px;
 		margin:0px;	
 		background:#f7f7f7;
+		height:auto;
 	}
 	.barra1{
 		float:left;

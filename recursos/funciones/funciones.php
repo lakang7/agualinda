@@ -100,6 +100,17 @@
 		return $retorna;
 	}
 	
+	function FormatoDia($dia){
+		$con=Conectarse();
+		$sql_selectFecha=" select  extract(dow from date('".$dia."')), extract(day from date('".$dia."')), extract(month from date('".$dia."')), extract(year from date('".$dia."'));";
+		$result_SelectFecha=pg_exec($con,$sql_selectFecha);
+		$fecha=pg_fetch_array($result_SelectFecha,0);
+		$dias = array('Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado');
+		$meses = array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
+		$variable = $dias[$fecha[0]]." ".$fecha[1]." de ".$meses[($fecha[2]-1)]." de ".$fecha[3];
+		return $variable;
+	}
+	
 	function FormatoFecha1($fecha_aux){
 		$dias = array('Domingo','Lunes','Martes','Miercoles','Jueves','Viernes','Sabado');
 		$meses = array('Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre');
@@ -140,12 +151,15 @@
 		</li>  
 		<li><img src="../recursos/imagenes/folder.gif" /> Clientes</span>
 			<ul>
+                <li><a href="../sistema/Clientes.php" ><img src="../recursos/imagenes/file.gif" /> Clientes</a></li>
                 <li><a href="../sistema/EntidadesBancarias.php" ><img src="../recursos/imagenes/file.gif" /> Entidades Bancarias</a></li>
 			</ul>
 		</li>         
 		<li><img src="../recursos/imagenes/folder.gif" /> Reportes</span>
 			<ul>
-                <li><a href="../reportes/ReporteResumenRutasDeleche.php" ><img src="../recursos/imagenes/file.gif" /> Resumen Rutas de Transporte</a></li>
+                <li><a href="../reportes/ReporteResumenRutasDeleche.php" ><img src="../recursos/imagenes/file.gif" /> Resumen Semanal Rutas y Productores</a></li>
+                <li><a href="../reportes/ReporteResumenProduccionDiaria.php" ><img src="../recursos/imagenes/file.gif" /> Resumen Producción Diaria</a></li>                
+                
 			</ul>
 		</li>               
 	</ul>

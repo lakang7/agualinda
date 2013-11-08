@@ -287,14 +287,14 @@
   function kgxuni(cat,pro){
 	  
 	  //alert(document.getElementById("lista"+cat).value);
-	  if(document.getElementById("pro_uni_"+cat+"_"+pro).value!="" && document.getElementById("pro_kg_"+cat+"_"+pro).value!=""){		 	  		 		  document.getElementById("pro_kgxuni_"+cat+"_"+pro).value=parseFloat((document.getElementById("pro_kg_"+cat+"_"+pro).value/document.getElementById("pro_uni_"+cat+"_"+pro).value)).toFixed(2);		  
+	  if(document.getElementById("pro_uni_"+cat+"_"+pro).value!="" && document.getElementById("pro_kg_"+cat+"_"+pro).value!=""){		 	  	  document.getElementById("pro_kgxuni_"+cat+"_"+pro).value=parseFloat((document.getElementById("pro_kg_"+cat+"_"+pro).value/document.getElementById("pro_uni_"+cat+"_"+pro).value)).toFixed(2);		  
 	  }
 	  
 	  if(document.getElementById("pro_kg_"+cat+"_"+pro).value){
 		  var productos = document.getElementById("lista"+cat).value.split("-");
 		  var acumula=0;
 		  for(var i=0;i<(productos.length-1);i++){
-			  //alert(document.getElementById("pro_kg_"+cat+"_"+productos[i]).value);
+			  //alert(productos[i]);
 			  if(document.getElementById("pro_kg_"+cat+"_"+productos[i]).value!=""){
 				  acumula += parseFloat(document.getElementById("pro_kg_"+cat+"_"+productos[i]).value);
 			  }

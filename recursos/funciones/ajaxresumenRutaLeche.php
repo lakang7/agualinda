@@ -11,7 +11,7 @@
 		}
 		
         echo "<input type='hidden' name='semana_leche' id='semana_leche' value='".$semanaBuscada."' />";
-        echo "<div class='Reporte-titulo'>Resumen Semanal Rutas de Transporte</div>";
+        echo "<div class='Reporte-titulo'>Resumen Semanal Rutas y Productores</div>";
 		
         echo "<div class='Reporte-fecha'><label>".FormatoSemana($semanaBuscada)."</label>";		
         echo "<div class='Reporte-flecha_izq' onclick='atras_resumen_ruta()'><img src='../recursos/imagenes/prev.png' style='margin-left:2px; margin-top:7px;' width='6' height='10' /></div>";

@@ -19,7 +19,7 @@
 .tabla-detalle{
 	float:left;
 	width:100%;
-	height:595px;
+	height:535px;
 	border:1px solid #CCC;	
 	border-top:0px;
 	z-index:999;

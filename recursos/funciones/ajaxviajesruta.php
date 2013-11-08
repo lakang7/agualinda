@@ -374,6 +374,9 @@
                 <div class="boton_cargar"><input type="button" value="Guardar" onclick="guardar()" style="font-size:12px;font-family: 'Oswald', sans-serif; line-height:14px; margin:0px; height:25px; width:70px;"/></div>  
 		  <?	
 		}
+		
+		
+									
 	}
 	
 	
@@ -510,7 +513,57 @@
 		  	   			  		   	   		   		   		   
 	  }/*Final del for*/
 	  
-
+		$sql_diaRegistrado="select * from inventarioleche where fecha='".$_POST["fecha"]."';";
+		$result_diaRegistrado=pg_exec($con,$sql_diaRegistrado);		
+		
+		if(pg_num_rows($result_diaRegistrado)==0){/*El dia no esta registrado en la tabla*/
+			$sql_ultimo_dia="select fecha from inventarioleche order by fecha DESC;";
+			$result_ultimo_dia=pg_exec($con,$sql_ultimo_dia);
+			$ultimodia=pg_fetch_array($result_ultimo_dia,0);			
+			$fechaInicio=strtotime($ultimodia[0]);
+		    $fechaFin=strtotime($_POST["fecha"]);
+			/*Recorro los dias desde el ultimo registrado al que estoy registrando*/			
+			for($i=($fechaInicio+86400);($i<=$fechaFin);$i+=86400){
+				$diaAtras=($i-86400);
+				$sql_diaAnterior="select * from inventarioleche where fecha='".date("Y-m-d",$diaAtras)."';";
+				$result_diaAnterior=pg_exec($con,$sql_diaAnterior);
+				$diaAnterior=pg_fetch_array($result_diaAnterior,0);
+								
+				$sql_insertDiaNuevo=" insert into inventarioleche values(nextval('inventarioleche_idinventarioleche_seq'),'".date("Y-m-d",$i)."',".$diaAnterior[7].",0,0,0,0,".$diaAnterior[7].")";
+				$result_insertDiaNuevo=pg_exec($con,$sql_insertDiaNuevo);				
+			}
+		}
+		
+		/*En este punto el dia ya se encuentra registrado en la base datos*/
+		/*consulto los viajes de ruta para determinar la leche recibida*/
+		
+		$totalLitros=0;
+		$sql_viajesRutas="select * from viajeruta where fecha='".$_POST["fecha"]."';";
+		$result_viajesRutas=pg_exec($con,$sql_viajesRutas);
+		for($i=0;$i<pg_num_rows($result_viajesRutas);$i++){
+			$viajeRuta=pg_fetch_array($result_viajesRutas,$i);
+			$totalLitros+=$viajeRuta[3];
+		}
+		
+		$sql_diaseditados="select * from inventarioleche where fecha >='".$_POST["fecha"]."' order by fecha;";
+		$result_diaseditados=pg_exec($con,$sql_diaseditados);
+		for($j=0;$j<pg_num_rows($result_diaseditados);$j++){
+			$diaEditado=pg_fetch_array($result_diaseditados,$j);
+			if($j==0){
+				
+				$sql_updateDia="update inventarioleche set recibida=".$totalLitros.", final=".(($diaEditado[2]+$totalLitros)-($diaEditado[4]+$diaEditado[5]+$diaEditado[6]))." where idinventarioleche=".$diaEditado[0]."";
+				$result_updateDia=pg_exec($con,$sql_updateDia);
+				
+			}else if($j>0){
+				
+				$indiceAnterior=pg_fetch_array($result_diaseditados,($j-1));
+				$sql_diaAnterior="select * from inventarioleche where idinventarioleche='".$indiceAnterior[0]."';";
+				$result_diaAnterior=pg_exec($con,$sql_diaAnterior);
+				$diaAnterior=pg_fetch_array($result_diaAnterior,0);
+				$sql_updateDia="update inventarioleche set inicial=".$diaAnterior[7].", final=".(($diaAnterior[7]+$diaEditado[3])-($diaEditado[4]+$diaEditado[5]+$diaEditado[6]))." where idinventarioleche=".$diaEditado[0].";";					
+				$result_updateDia=pg_exec($con,$sql_updateDia);				
+			}
+		}
 	  
 	  ?>
       	<script type="text/javascript" language="javascript">
@@ -633,6 +686,58 @@
 				   						
 			   }			   			   			   
 		  }
+		  
+		$sql_diaRegistrado="select * from inventarioleche where fecha='".$_POST["fecha"]."';";
+		$result_diaRegistrado=pg_exec($con,$sql_diaRegistrado);		
+		
+		if(pg_num_rows($result_diaRegistrado)==0){/*El dia no esta registrado en la tabla*/
+			$sql_ultimo_dia="select fecha from inventarioleche order by fecha DESC;";
+			$result_ultimo_dia=pg_exec($con,$sql_ultimo_dia);
+			$ultimodia=pg_fetch_array($result_ultimo_dia,0);			
+			$fechaInicio=strtotime($ultimodia[0]);
+		    $fechaFin=strtotime($_POST["fecha"]);
+			/*Recorro los dias desde el ultimo registrado al que estoy registrando*/			
+			for($i=($fechaInicio+86400);($i<=$fechaFin);$i+=86400){
+				$diaAtras=($i-86400);
+				$sql_diaAnterior="select * from inventarioleche where fecha='".date("Y-m-d",$diaAtras)."';";
+				$result_diaAnterior=pg_exec($con,$sql_diaAnterior);
+				$diaAnterior=pg_fetch_array($result_diaAnterior,0);
+								
+				$sql_insertDiaNuevo=" insert into inventarioleche values(nextval('inventarioleche_idinventarioleche_seq'),'".date("Y-m-d",$i)."',".$diaAnterior[7].",0,0,0,0,".$diaAnterior[7].")";
+				$result_insertDiaNuevo=pg_exec($con,$sql_insertDiaNuevo);				
+			}
+		}
+		
+		/*En este punto el dia ya se encuentra registrado en la base datos*/
+		/*consulto los viajes de ruta para determinar la leche recibida*/
+		
+		$totalLitros=0;
+		$sql_viajesRutas="select * from viajeruta where fecha='".$_POST["fecha"]."';";
+		$result_viajesRutas=pg_exec($con,$sql_viajesRutas);
+		for($i=0;$i<pg_num_rows($result_viajesRutas);$i++){			
+			$viajeRuta=pg_fetch_array($result_viajesRutas,$i);
+			$totalLitros+=$viajeRuta[3];
+		}
+		
+		$sql_diaseditados="select * from inventarioleche where fecha >='".$_POST["fecha"]."' order by fecha;";
+		$result_diaseditados=pg_exec($con,$sql_diaseditados);
+		for($j=0;$j<pg_num_rows($result_diaseditados);$j++){
+			$diaEditado=pg_fetch_array($result_diaseditados,$j);
+			if($j==0){
+				
+				$sql_updateDia="update inventarioleche set recibida=".$totalLitros.", final=".(($diaEditado[2]+$totalLitros)-($diaEditado[4]+$diaEditado[5]+$diaEditado[6]))." where idinventarioleche=".$diaEditado[0].";";
+				$result_updateDia=pg_exec($con,$sql_updateDia);
+				
+			}else if($j>0){
+				
+				$indiceAnterior=pg_fetch_array($result_diaseditados,($j-1));
+				$sql_diaAnterior="select * from inventarioleche where idinventarioleche='".$indiceAnterior[0]."';";
+				$result_diaAnterior=pg_exec($con,$sql_diaAnterior);
+				$diaAnterior=pg_fetch_array($result_diaAnterior,0);
+				$sql_updateDia="update inventarioleche set inicial=".$diaAnterior[7].", final=".(($diaAnterior[7]+$diaEditado[3])-($diaEditado[4]+$diaEditado[5]+$diaEditado[6]))." where idinventarioleche=".$diaEditado[0].";";					
+				$result_updateDia=pg_exec($con,$sql_updateDia);				
+			}
+		}		  
 		  		   		  											
 	  ?>
       	<script type="text/javascript" language="javascript">		 
