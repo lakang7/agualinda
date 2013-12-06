@@ -118,7 +118,7 @@
     </div>
 	<div class="cuerpo" id="cuerpo">
 
-	<div class="reporte_leche" id="reporte_leche"  >
+	<div class="reporte_leche" id="reporte_produccion"  >
 		<?php
 			$sql_selectHoy=" select current_date, extract(dow from current_date), extract(day from current_date), extract(month from current_date), extract(year from current_date);";
 			$result_selectHoy=pg_exec($con,$sql_selectHoy);
@@ -133,65 +133,7 @@
         
         <div id="reporte" style="float:left; width:100%;">
        		
-            <div class="linea">
-            	<div class="columa" style="width:16%">Litros Iniciales</div>
-                <div class="columa" style="width:8%; text-align:right">12800</div>
-            </div>
-       		<div class="linea">
-            	<div class="columa" style="width:16%">Litros Recibidos</div>
-                <div class="columa" style="width:8%; text-align:right">4500</div>
-            </div> 
-       		<div class="linea">
-            	<div class="columa" style="width:16%">Litros Trabajados</div>
-                <div class="columa" style="width:8%; text-align:right">4500</div>
-            </div>            
-       		<div class="linea" style="margin-bottom:15px;">
-            	<div class="columa" style="width:16%; border-bottom:1px solid #CCC">Litros Finales</div>
-                <div class="columa" style="width:8%; border-bottom:1px solid #CCC;; text-align:right">4500</div>
-            </div> 
-            
-            <div class="linea"><label style="margin-left:1%">Semiduros</label></div>
-            <div class="linea">
-            	<div class="columa" style="width:20%;background:#84cff7">Nombre del Producto</div>
-                <div class="columa" style="width:6%;background:#84cff7">Unidades</div>
-                <div class="columa" style="width:6%;background:#84cff7">Kilogramos</div>
-                <div class="columa" style="width:6%;background:#84cff7">KgxUnidad</div>                
-            </div> 
-            <div class="linea">
-            	<div class="columa" style="width:20%;">Cuajada Pequeña</div>
-                <div class="columa" style="width:6%;">25</div>
-                <div class="columa" style="width:6%;">21</div>
-                <div class="columa" style="width:6%;">1.2</div>                
-            </div>  
-            <div class="linea">
-            	<div class="columa" style="width:20%; border-bottom:1px solid #CCC">Cuajada Grande</div>
-                <div class="columa" style="width:6%; border-bottom:1px solid #CCC">18</div>
-                <div class="columa" style="width:6%; border-bottom:1px solid #CCC">93</div>
-                <div class="columa" style="width:6%; border-bottom:1px solid #CCC">3.7</div>                
-            </div> 
-            <div class="linea" style="margin-bottom:15px;"><label style="margin-left:1%;">12000 litros que generaron 4300 kg a un promedio de 6.7 Litros x Kg</label></div>
-           
-           
-            <div class="linea"><label style="margin-left:1%">Mozzarellas</label></div>
-            <div class="linea">
-            	<div class="columa" style="width:20%;background:#84cff7">Nombre del Producto</div>
-                <div class="columa" style="width:6%;background:#84cff7">Unidades</div>
-                <div class="columa" style="width:6%;background:#84cff7">Kilogramos</div>
-                <div class="columa" style="width:6%;background:#84cff7">KgxUnidad</div>                
-            </div> 
-            <div class="linea">
-            	<div class="columa" style="width:20%;">Cuajada Pequeña</div>
-                <div class="columa" style="width:6%;">25</div>
-                <div class="columa" style="width:6%;">21</div>
-                <div class="columa" style="width:6%;">1.2</div>                
-            </div>  
-            <div class="linea">
-            	<div class="columa" style="width:20%; border-bottom:1px solid #CCC">Cuajada Grande</div>
-                <div class="columa" style="width:6%; border-bottom:1px solid #CCC">18</div>
-                <div class="columa" style="width:6%; border-bottom:1px solid #CCC">93</div>
-                <div class="columa" style="width:6%; border-bottom:1px solid #CCC">3.7</div>                
-            </div> 
-            <div class="linea"><label style="margin-left:1%;">12000 litros que generaron 4300 kg a un promedio de 6.7 Litros x Kg</label></div>           
+                   
             
         </div><!--finaliza reporte -->        
         
@@ -210,19 +152,19 @@
 	} 
 	
 	function inicializa_resumen_ruta(){		
-		$("#reporte_leche").load("../recursos/funciones/ajaxresumenProduccion.php", {action: 1, dia:document.getElementById("dia_produccion").value, ira: 0},function(){
+		$("#reporte_produccion").load("../recursos/funciones/ajaxresumenProduccion.php", {action: 1, dia:document.getElementById("dia_produccion").value, ira: 0},function(){
 			ajustar();	
 		});				
 	}
 
 	function adelante_resumen_ruta(){	
-		$("#reporte_leche").load("../recursos/funciones/ajaxresumenProduccion.php", {action: 1, dia:document.getElementById("dia_produccion").value, ira: 2},function(){
+		$("#reporte_produccion").load("../recursos/funciones/ajaxresumenProduccion.php", {action: 1, dia:document.getElementById("dia_produccion").value, ira: 2},function(){
 			ajustar();	
 		});				
 	}
 	
 	function atras_resumen_ruta(){	
-		$("#reporte_leche").load("../recursos/funciones/ajaxresumenProduccion.php", {action: 1, dia:document.getElementById("dia_produccion").value, ira: 1},function(){
+		$("#reporte_produccion").load("../recursos/funciones/ajaxresumenProduccion.php", {action: 1, dia:document.getElementById("dia_produccion").value, ira: 1},function(){
 			ajustar();	
 		});				
 	}	

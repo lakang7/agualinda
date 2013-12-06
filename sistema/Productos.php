@@ -194,7 +194,7 @@
 		    $sql_productos="select * from producto order by idproducto";
 			$result_productos=pg_exec($con,$sql_productos);
 			if(pg_num_rows($result_productos)>0){
-				for($i=0;$i<pg_num_rows($result_productos) && $i<10;$i++){
+				for($i=0;$i<pg_num_rows($result_productos) && $i<20;$i++){
 					$producto=pg_fetch_array($result_productos,$i);																																							
 			    	echo "<div class='tabla-linea'>";
 		        	echo "<div class='tabla-linea-elemento' style='width:19%'>".Codigo("PRO",$producto[0])."</div>";
@@ -219,7 +219,7 @@
             <div class="tabla-pie-tabulador" title="Ir a la primera página" onclick=cambiar_pagina(1)><<</div>
             <div class="tabla-pie-tabulador" title="Ir una página atras" onclick=cambiar_pagina(2)><</div>
             
-            <div class="tabla-pie-actual">Página <label id="pagina_actual">1</label>/<label id="total_paginas"><?php echo ceil(pg_num_rows($result_productos)/10); ?></label></div>
+            <div class="tabla-pie-actual">Página <label id="pagina_actual">1</label>/<label id="total_paginas"><?php echo ceil(pg_num_rows($result_productos)/20); ?></label></div>
 			
             <div class="tabla-pie-tabulador" title="Ir una página adelante" onclick=cambiar_pagina(3)>></div>
             <div class="tabla-pie-tabulador" title="Ir a la última página" onclick=cambiar_pagina(4)>>></div>            
@@ -230,7 +230,7 @@
                 <div class="tabla-pie-elemento-select">
                 	<select name="selector_pagina" id="selector_pagina" onchange="paginar()">
                         <?php
-						    $indice= ceil(pg_num_rows($result_productos)/10);
+						    $indice= ceil(pg_num_rows($result_productos)/20);
 							for($i=0;$i<$indice;$i++){
 								echo "<option value=".($i+1).">".($i+1)."</option>";
 							}						
@@ -243,12 +243,12 @@
                 <div class="tabla-pie-elemento-select">
                 	<select name="selector_registros" id="selector_registros" onchange="paginar2()">
                     	<option value="10" selected="selected" >10</option>
-                        <option value="20">20</option>
+                        <option value="20" selected="selected">20</option>
                         <option value="50">50</option>
                     </select>
                 </div>                
             </div> 
-            <div class="tabla-pie-actual" style="float:right; margin-right:5px;">Mostrando 01- <?php $limite; (pg_num_rows($result_productos)<10)?$limite=pg_num_rows($result_productos):$limite=10; echo $limite; ?> de <?php echo pg_num_rows($result_productos); ?></div>    
+            <div class="tabla-pie-actual" style="float:right; margin-right:5px;">Mostrando 01- <?php $limite; (pg_num_rows($result_productos)<20)?$limite=pg_num_rows($result_productos):$limite=20; echo $limite; ?> de <?php echo pg_num_rows($result_productos); ?></div>    
     </div>        
                                             
         </div>             

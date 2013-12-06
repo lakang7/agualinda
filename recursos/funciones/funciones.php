@@ -1,5 +1,4 @@
-<?php
-		
+<?php  
     function fontStyles(){
 		echo "<link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,300,600,700&amp;subset=latin,latin-ext' rel='stylesheet' type='text/css'>";
 		echo "<link href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css' />";
@@ -38,7 +37,6 @@
 	       echo "No pudo conectarse al servidor";
 	       exit();
 	   }
-	   // pg_set_client_encoding('UTF-8');
 	    return $conexion;
 	}
 	
@@ -154,7 +152,13 @@
                 <li><a href="../sistema/Clientes.php" ><img src="../recursos/imagenes/file.gif" /> Clientes</a></li>
                 <li><a href="../sistema/EntidadesBancarias.php" ><img src="../recursos/imagenes/file.gif" /> Entidades Bancarias</a></li>
 			</ul>
-		</li>         
+		</li> 
+		<li><img src="../recursos/imagenes/folder.gif" /> Ventas</span>
+			<ul>
+                <li><a href="../sistema/Venta.php" ><img src="../recursos/imagenes/file.gif" /> Realizar Venta</a></li> 
+                <li><a href="../sistema/FacturarVenta.php" ><img src="../recursos/imagenes/file.gif" /> Facturar Venta</a></li>               
+			</ul>
+		</li>                 
 		<li><img src="../recursos/imagenes/folder.gif" /> Reportes</span>
 			<ul>
                 <li><a href="../reportes/ReporteResumenRutasDeleche.php" ><img src="../recursos/imagenes/file.gif" /> Resumen Semanal Rutas y Productores</a></li>

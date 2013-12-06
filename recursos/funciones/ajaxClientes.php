@@ -32,7 +32,7 @@
 			$result_last_record=pg_exec($con,$sql_last_record);
 			$last_record=pg_fetch_array($result_last_record,0);	
 			
-			$sql_insert_record="insert into cliente_ubicacion values(nextval('cliente_idcliente_seq'),'".$last_record[0]."','".$_POST["ubicacion1"]."',now(),null)";
+			$sql_insert_record="insert into cliente_ubicacion values(nextval('cliente_ubicacion_idcliente_ubicacion_seq'),'".$last_record[0]."','".$_POST["ubicacion1"]."',now(),null)";
 			$result_insert_record = pg_exec($con,$sql_insert_record);								
 												
 			if($result_insertCliente!=NULL){
@@ -249,7 +249,7 @@
                     </div>
                 	<div class="detalle-linea-elemento" style="width:36%;">
                     	<div class="detalle-linea-elemento-arriba" style="width:100%;">Direccion (*)</div>
-                        <div class="detalle-linea-elemento-abajo"><input type="text" value="" id="direccion1" name="direccion1" class="entrada"  style="width:97%" maxlength="30" /></div>
+                        <div class="detalle-linea-elemento-abajo"><input type="text" value="" id="direccion1" name="direccion1" class="entrada"  style="width:97%" maxlength="400" /></div>
                     </div> 
                 	<div class="detalle-linea-elemento" style="width:17%;">
                     	<div class="detalle-linea-elemento-arriba" style="width:100%;">Fecha de Registro (*)</div>
@@ -427,11 +427,14 @@
 			$result_select_record2=pg_exec($con,$sql_select_record2);
 			$antigua_ubicacion=pg_fetch_array($result_select_record2,0);
 			
+			//echo "ubicacion actual: ".$antigua_ubicacion[0]." y la nueva es: ".$_POST["ubicacion3"];
+			
 			if($antigua_ubicacion[0]!=$_POST["ubicacion3"]){
 				
-				$sql_select_vieja_ubicacion="select idcliente_ubicacion from cliente_ubicacion where idcliente='".InversaCodigo($_POST["codigo3"])."' order by idcliente_ubicacion DESC";
+				$sql_select_vieja_ubicacion="select idcliente_ubicacion from cliente_ubicacion where idcliente='".InversaCodigo($_POST["codigo3"])."' and hasta is null";
 				$result_select_vieja_ubicacion=pg_exec($con,$sql_select_vieja_ubicacion);
 				$ultima_ubicacion=pg_fetch_array($result_select_vieja_ubicacion,0);
+				
 												
 				$sql_update_vieja_ubicacion="update cliente_ubicacion set hasta = now() where idcliente_ubicacion='".$ultima_ubicacion[0]."'";
 				$result_update_vieja_ubicacion=pg_exec($con,$sql_update_vieja_ubicacion);
