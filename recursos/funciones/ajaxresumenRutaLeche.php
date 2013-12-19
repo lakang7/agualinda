@@ -40,6 +40,8 @@
 		$litros_completos=0;
 		$bolivares_leche_completos=0;
 		$bolivares_transporte_completos=0;
+		$bolivares_retencion_total=0;
+		$bolivares_transporte_total=0;
 		
 		for($i=0;$i<pg_num_rows($result_select_ruta);$i++){
 			$ruta = pg_fetch_array($result_select_ruta,$i);
@@ -291,7 +293,7 @@
 	            echo "<div class='rl_columna' style='width:8%;text-align:right;'>".$global_litros."</div>";
 	            echo "<div class='rl_columna' style='width:8%;text-align:right;'>".number_format(round($global_transporte,2),2,'.','')."</div>";
 	        	echo "</div>";				
-			
+			$bolivares_transporte_total+=$global_transporte;
 			
 			$sql_tipopersona="select * from tipopersona where idtipopersona='".$ruta[12]."';";
 			$result_tipopersona=pg_exec($con,$sql_tipopersona);
@@ -309,6 +311,9 @@
 	            echo "<div class='rl_columna' style='width:8%;text-align:right;'>".$tipopersona[2]."%</div>";
 	            echo "<div class='rl_columna' style='width:8%;text-align:right;'>".number_format(round($global_transporte*($tipopersona[2]/100),2),2,'.','')."</div>";
 	        	echo "</div>";						
+				
+				$bolivares_retencion_total+=(round($global_transporte*($tipopersona[2]/100),2));
+				
 			
 	        	echo "<div class='rl_linea' style='border-left:1px solid #f7f7f7;border-bottom:1px solid #CCC; background:#F8F8F8'>";	        	
 	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:8%;'></div>";
@@ -371,6 +376,32 @@
 				echo "<div class='rl_columna' style='width:21%;text-align:right;'>Pago Total Litros de Leche</div>";	            
 	            echo "<div class='rl_columna' style='width:8%;text-align:right;'>".number_format(round($bolivares_leche_completos,2),2,'.','')."</div>";
 	        	echo "</div>";
+				
+	        	echo "<div class='rl_linea' style='border-left:1px solid #f7f7f7;border-bottom:1px solid #CCC; background:#F8F8F8;'>";	        	
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:8%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:6%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:7%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:8.5%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:6.8%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:6%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:6%;'></div>";
+				echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;width:8%;text-align:right;'></div>";
+				echo "<div class='rl_columna' style='width:21%;text-align:right;'>Pago Por Transporte</div>";	            
+	            echo "<div class='rl_columna' style='width:8%;text-align:right;'>".number_format(round($bolivares_transporte_total,2),2,'.','')."</div>";
+	        	echo "</div>";	
+				
+	        	echo "<div class='rl_linea' style='border-left:1px solid #f7f7f7;border-bottom:1px solid #CCC; background:#F8F8F8;'>";	        	
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:8%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:6%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:7%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:8.5%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:6.8%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:6%;'></div>";
+	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:6%;'></div>";
+				echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;width:8%;text-align:right;'></div>";
+				echo "<div class='rl_columna' style='width:21%;text-align:right;'>Total Retención I.S.L.R</div>";	            
+	            echo "<div class='rl_columna' style='width:8%;text-align:right;'>".number_format(round($bolivares_retencion_total,2),2,'.','')."</div>";
+	        	echo "</div>";							
 				
 	        	echo "<div class='rl_linea' style='border-left:1px solid #f7f7f7;border-bottom:1px solid #CCC; background:#F8F8F8;'>";	        	
 	            echo "<div class='rl_columna' style='border-bottom:1px solid #f7f7f7;border-right:1px solid #f7f7f7;width:8%;'></div>";

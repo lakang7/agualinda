@@ -48,11 +48,15 @@
 		$producto=pg_fetch_array($result_producto,0);
 		$posicionY+=5;
 		$pdf->SetY($posicionY);	
-		$pdf->Cell(18,4,utf8_decode("PRO00001"),0);	
+		$pdf->Cell(18,4,utf8_decode(Codigo("PRO",$producto[0])),0);	
 		$pdf->Cell(42,4,utf8_decode($producto[2]),0);
 		$pdf->Cell(8,4,utf8_decode("Und"),0);
-		$pdf->Cell(14,4,utf8_decode($producto_factura[3]),0,'L','R');	
-		$pdf->Cell(8,4,utf8_decode("Kgr"),0);
+		$pdf->Cell(14,4,utf8_decode($producto_factura[3]),0,'L','R');
+		if($producto[5]==1){
+			$pdf->Cell(8,4,utf8_decode("Kgr"),0);
+		}else{
+			$pdf->Cell(8,4,utf8_decode("Und"),0);
+		}				
 		$pdf->Cell(14,4,utf8_decode($producto_factura[4]),0,'L','R');
 		$pdf->Cell(12,4,utf8_decode($producto_factura[5]),0,'L','R');		
 		$pdf->Cell(17,4,utf8_decode($producto_factura[6]),0,'L','R');

@@ -373,31 +373,38 @@
 		$result_diaregistrado=pg_exec($con,$sql_diaregistrado);
 		$registros = pg_fetch_array($result_diaregistrado,0);
 		
-		if($registros[0]==0){/*El dia no esta registrado en la tabla*/
-			/*selecciono el ultimo dia registrado en la base datos*/
+		if($registros[0]==0){
+
 			$sql_ultimo_dia="select fecha from inventarioproductos order by fecha DESC;";
 			$result_ultimo_dia=pg_exec($con,$sql_ultimo_dia);
 			$ultimodia=pg_fetch_array($result_ultimo_dia,0);
 			
 			$fechaInicio=strtotime($ultimodia[0]);
 		    $fechaFin=strtotime($_POST["fecha"]);
-			/*Recorro los dias desde el ultimo registrado al que estoy registrando*/
+			
+			//echo "desde: ".$ultimodia[0]." hasta: ".$_POST["fecha"];
+			
+			$sql_control="select * from control";
+			$result_control=pg_exec($con,$sql_control);
+			$control=pg_fetch_array($result_control,0);			
+			
+			
 			for($i=($fechaInicio+86400);($i<=$fechaFin);$i+=86400){
 				$sql_productos =" select * from producto order by idproducto";
 				$result_productos = pg_exec($con,$sql_productos);
 				$diaAtras=($i-86400);
-				/*Recorro la lista de productos*/
+				
 				for($j=0;$j<pg_num_rows($result_productos);$j++){
 					
 					$producto=pg_fetch_array($result_productos,$j);
-					/*Consulto el inventario del dia y la fecha anterior para el prodcuto*/
-					$sql_inventario_atras=" select * from inventarioproductos where fecha='".date("Y-m-d",$diaAtras)."' and idproducto='".$producto[0]."'; ";
-					$result_inventario_atras=pg_exec($con,$sql_inventario_atras);
-					$inventarioAtras=pg_fetch_array($result_inventario_atras,0);
-					
-					/*Incerto el nuevo inventario para la fecha y el producto*/
-					$sql_insertInvetario=" insert into inventarioproductos values(nextval('inventarioproductos_idinventarioproducto_seq'),'".$producto[0]."','".date("Y-m-d",$i)."','".$inventarioAtras[11]."',0,'".$inventarioAtras[11]."',0,0,0,0,0,'".$inventarioAtras[11]."'); ";
-					$result_insertInventario=pg_exec($con,$sql_insertInvetario);																				
+					if($producto[0]!=$control[2]){					
+						$sql_inventario_atras=" select * from inventarioproductos where fecha='".date("Y-m-d",$diaAtras)."' and idproducto='".$producto[0]."'; ";										
+						$result_inventario_atras=pg_exec($con,$sql_inventario_atras);
+						$inventarioAtras=pg_fetch_array($result_inventario_atras,0);										
+						$sql_insertInvetario=" insert into inventarioproductos values(nextval('inventarioproductos_idinventarioproducto_seq'),'".$producto[0]."','".date("Y-m-d",$i)."','".$inventarioAtras[11]."',0,'".$inventarioAtras[11]."',0,0,0,0,0,'".$inventarioAtras[11]."'); ";
+						$result_insertInventario=pg_exec($con,$sql_insertInvetario);
+					}
+																									
 				}				
 			}
 			

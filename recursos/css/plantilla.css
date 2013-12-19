@@ -80,7 +80,7 @@
 		float:left;
 		width:79.9%;
 		min-height:520px;
-
+		/*height:auto;*/
 		border-bottom:1px solid #CCC;
 		padding-top:15px;
 		padding-bottom:15px;				
@@ -299,7 +299,7 @@
 		height:25px;
 		border-right:1px solid #CCC;
 		font-family:'Segoe UI Semilight', 'Open Sans', Verdana, Arial, Helvetica, sans-serif;
-		font-size:12px;
+		font-size:.7em;
 		line-height:25px;
 		color:#666;	
 	}

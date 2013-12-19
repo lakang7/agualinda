@@ -215,8 +215,7 @@
                           <option value=""></option>
                           <option value="1" title="En esta opción solo se genera una Nota de entrega para el cliente.">Sin Factura</option>
                           <option value="2">Factura + Nota de Entrega</option>
-                          <option value="3">Factura Con Queso Telita + Nota de Entrega</option>
-                          <option value="4">Factura Con Cadena En Frio + Nota de Entrega</option>
+                          <option value="3">Factura Con Ajuste Por Diferencia</option>
                       </select>                  
                 </div>
             </div>

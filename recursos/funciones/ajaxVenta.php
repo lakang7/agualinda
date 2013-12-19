@@ -67,7 +67,7 @@
 			$result_precioxubicacion=pg_exec($con,$sql_precioxubicacion);
 			$precioxUbicacion=pg_fetch_array($result_precioxubicacion,0);
 			//if($_POST["tipodeventa"]==1 && $producto[4]=="t"){
-			if($producto[4]=="t"){
+			if($producto[4]=="t"){ 
 				$aux=round(($precioxUbicacion[6]*1.12),2);
 				$preciosFulesProductos=$preciosFulesProductos.$aux."-";
 			}else{
@@ -151,6 +151,30 @@
 		<script type="text/javascript" language="javascript">
 	$(function(){
 		
+	$(document).ready(function(){ 
+		$("#numeroUnidades, #kilogramosVenta").keydown(function(event) {
+		   if(event.shiftKey)
+		   {
+		        event.preventDefault();
+		   }
+		 
+		   if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 190)    {
+		   }
+		   else {
+		        if (event.keyCode < 95) {
+		          if (event.keyCode < 48 || event.keyCode > 57) {
+		                event.preventDefault();
+		          }
+	        } 
+	        else {
+	              if (event.keyCode < 96 || event.keyCode > 105) {
+	                  event.preventDefault();
+	              }
+	        }
+	      }
+	   });
+	});		
+		
 		$("#finalizarVenta").click(function(){
 			if(document.getElementById("numeroItems").value==1){
 				alert("Debe agragar por lo menos un producto a la venta.");
@@ -170,6 +194,11 @@
 				alert("Debe indicar el numero de unidades de producto que se esta agregando a la venta.");
 				bandAgrega=1;
 			}	
+			
+			if (!/^([0-9])*$/.test(document.getElementById("numeroUnidades").value) && bandAgrega==0){
+		    	alert("El valor " + numero + " no es un número");
+			}			
+			
 			if(document.getElementById("kilogramosVenta").value=="" && bandAgrega==0){
 				alert("Debe indicar el peso de las unidades de producto que esta agregando a la venta.");
 				bandAgrega=1;
@@ -305,9 +334,9 @@
 			}		
 		}
 		
-		echo $listaProductos."</br>";
-		echo $preciosProductos."</br>";
-		echo $impuestoProductos."</br>";
+		//echo $listaProductos."</br>";
+		//echo $preciosProductos."</br>";
+		//echo $impuestoProductos."</br>";
 
 		$sql_control="select * from control";
 		$result_control=pg_exec($con,$sql_control);
@@ -319,7 +348,7 @@
 		$totalIva=round(($_POST["gravables"]*0.12),2);
 		$montoTotal=round(($subtotal+$totalIva),2);
 		
-		$sql_insertVenta="insert into venta values(nextval('venta_idventa_seq'),".$cliente[5].",".$cliente[0].",".$_POST["tipoVentaAplica"].",".$_POST["tipoPagoAplica"].",".$_POST["precioAplica"].",now(),".number_format(round($excento,2),2,'.','').",".number_format(round($gravables,2),2,'.','').",".number_format(round($subtotal,2),2,'.','').",".number_format(round($totalIva,2),2,'.','').",".number_format(round($montoTotal,2),2,'.','').")";
+		$sql_insertVenta="insert into venta values(nextval('venta_idventa_seq'),".$cliente[5].",".$cliente[0].",".$_POST["tipoVentaAplica"].",".$_POST["tipoPagoAplica"].",".$_POST["precioAplica"].",now(),".number_format(round($excento,2),2,'.','').",".number_format(round($gravables,2),2,'.','').",".number_format(round($subtotal,2),2,'.','').",".number_format(round($totalIva,2),2,'.','').",".number_format(round($montoTotal,2),2,'.','').")";				
 		$result_insertVenta=pg_exec($con,$sql_insertVenta);
 		
 		$sql_last_record="select last_value from venta_idventa_seq;";
@@ -333,10 +362,88 @@
 			$result_inserProductoVenta=pg_exec($con,$sql_inserProductoVenta);
 		}
 		
+		/*Inserto la cuenta por cobrar ya que el tipo de pago que aplica es 2 osea a credito*/
+		if($_POST["tipoPagoAplica"]==2){
+			$sql_insertCuentaporCobrar="insert into cuentaporcobrar values(nextval('cuentaporcobrar_idcuentaporcobrar_seq'),".$last_record[0].",'".number_format(round($montoTotal,2),2,'.','')."','0.00','".number_format(round($montoTotal,2),2,'.','')."',1)";
+			$result_insertCuentaporCobrar=pg_exec($con,$sql_insertCuentaporCobrar);			
+		}
+		
+		/*-------------------------------------------------------------------------------------------------------*/
+		$sql_diaregistrado="select count(*) from inventarioproductos where fecha=current_date;";
+		$result_diaregistrado=pg_exec($con,$sql_diaregistrado);
+		$registros = pg_fetch_array($result_diaregistrado,0);
+		
+		if($registros[0]==0){
+
+			$sql_ultimo_dia="select fecha from inventarioproductos order by fecha DESC;";
+			$result_ultimo_dia=pg_exec($con,$sql_ultimo_dia);
+			$ultimodia=pg_fetch_array($result_ultimo_dia,0);
+			
+			$fechaInicio=strtotime($ultimodia[0]);
+		    $fechaFin=strtotime($_POST["fecha"]);			
+			
+			$sql_control="select * from control";
+			$result_control=pg_exec($con,$sql_control);
+			$control=pg_fetch_array($result_control,0);			
+			
+			
+			for($i=($fechaInicio+86400);($i<=$fechaFin);$i+=86400){
+				$sql_productos =" select * from producto order by idproducto";
+				$result_productos = pg_exec($con,$sql_productos);
+				$diaAtras=($i-86400);
+				
+				for($j=0;$j<pg_num_rows($result_productos);$j++){
+					
+					$producto=pg_fetch_array($result_productos,$j);
+					if($producto[0]!=$control[2]){					
+						$sql_inventario_atras=" select * from inventarioproductos where fecha='".date("Y-m-d",$diaAtras)."' and idproducto='".$producto[0]."'; ";										
+						$result_inventario_atras=pg_exec($con,$sql_inventario_atras);
+						$inventarioAtras=pg_fetch_array($result_inventario_atras,0);										
+						$sql_insertInvetario=" insert into inventarioproductos values(nextval('inventarioproductos_idinventarioproducto_seq'),'".$producto[0]."','".date("Y-m-d",$i)."','".$inventarioAtras[11]."',0,'".$inventarioAtras[11]."',0,0,0,0,0,'".$inventarioAtras[11]."'); ";
+						$result_insertInventario=pg_exec($con,$sql_insertInvetario);
+					}
+																									
+				}				
+			}			
+		}	
+						
+		$productos = explode("-",$_POST["productosSeleccionados"]);		
+		for($i=0;$i<(sizeof($productos)-1);$i++){					
+			$sql_diaseditados="select * from inventarioproductos where fecha >=current_date and idproducto='".$productos[$i]."' order by fecha;";
+			$result_diaseditados=pg_exec($con,$sql_diaseditados);
+			for($j=0;$j<pg_num_rows($result_diaseditados);$j++){
+				$diaEditado = pg_fetch_array($result_diaseditados,$j);
+				if($j==0){/*Primera fecha en la secuencia de dias*/
+					$sql_updateDia=" update inventarioproductos set venta='".$_POST["unidades".$productos[$i]]."', final='".(($diaEditado[5]+$diaEditado[6])-($_POST["unidades".$productos[$i]]+$diaEditado[8]+$diaEditado[9]+$diaEditado[10]))."' where idinventarioproducto='".$diaEditado[0]."'";
+					$result_updateDia=pg_exec($con,$sql_updateDia);																
+				}else if($j>0){/*Resto de dias*/
+					$indiceAnterior=pg_fetch_array($result_diaseditados,($j-1));
+					$sql_diaAnterior="select * from inventarioproductos where idinventarioproducto='".$indiceAnterior[0]."';";
+					$result_diaAnterior=pg_exec($con,$sql_diaAnterior);
+					$diaAnterior=pg_fetch_array($result_diaAnterior,0);					
+					$sql_updateDia=" update inventarioproductos set inicial='".$diaAnterior[11]."', inicialtotal=(".$diaAnterior[11]."+".$diaEditado[4]."), final=((".$diaAnterior[11]."+".$diaEditado[4].")+".$diaEditado[6].")-(".$diaEditado[7]."+".$diaEditado[8]."+".$diaEditado[9]."+".$diaEditado[10].") where idinventarioproducto='".$diaEditado[0]."' ";					
+					$result_updateDia = pg_exec($con,$sql_updateDia);										
+				}												
+			}
+		}
+				
+		/*-------------------------------------------------------------------------------------------------------*/			
+		
+		
+		
+		if($_POST["tipoVenta"]==1){
+			?>            	
+            	<script type="text/javascript" language="javascript">
+					alert("Venta Registrada Satisfactoriamente.");
+					location.href="../../sistema/FacturarVenta.php";
+				</script>            
+            <?						
+		}
+		
 		
 		
 		if($_POST["tipoVenta"]==2){ /*Registro de factura con precio legal*/							
-			$sql_insertFactura="insert into factura values(nextval('factura_idfactura_seq'),".$control[1].",".$last_record[0].",".$excento.",".$gravables.",".$subtotal.",".$totalIva.",".$montoTotal.")";
+			$sql_insertFactura="insert into factura values(nextval('factura_idfactura_seq'),".$control[1].",".$last_record[0].",".number_format(round($excento,2),2,'.','').",".number_format(round($gravables,2),2,'.','').",".number_format(round($subtotal,2),2,'.','').",".number_format(round($totalIva,2),2,'.','').",".number_format(round($montoTotal,2),2,'.','').")";
 			$result_insertFactura=pg_exec($con,$sql_insertFactura);
 			
 			$sql_last_record="select last_value from factura_idfactura_seq;";
@@ -395,12 +502,19 @@
 			$result_updateFactura=pg_exec($con,$sql_updateFactura);
 			
 			$sql_updateControl="update control set factura='".($control[1]+1)."' where idcontrol=1;";
-			$result_updateControl=pg_exec($con,$sql_updateControl);																					
+			$result_updateControl=pg_exec($con,$sql_updateControl);
+			?>            	
+            	<script type="text/javascript" language="javascript">
+					alert("Venta Registrada Satisfactoriamente.");
+					location.href="../../sistema/FacturarVenta.php";
+				</script>            
+            <?
+																								
 		}
 		
 		if($_POST["tipoVenta"]==3){ /*Registro de factura con precio legal y diferencia por queso telita*/
 			
-			$sql_insertFactura="insert into factura values(nextval('factura_idfactura_seq'),".$control[1].",".$last_record[0].",".$excento.",".$gravables.",".$subtotal.",".$totalIva.",".$montoTotal.")";
+			$sql_insertFactura="insert into factura values(nextval('factura_idfactura_seq'),".$control[1].",".$last_record[0].",".number_format(round($excento,2),2,'.','').",".number_format(round($gravables,2),2,'.','').",".number_format(round($subtotal,2),2,'.','').",".number_format(round($totalIva,2),2,'.','').",".number_format(round($montoTotal,2),2,'.','').")";
 			$result_insertFactura=pg_exec($con,$sql_insertFactura);
 			
 			$sql_last_record="select last_value from factura_idfactura_seq;";
@@ -454,7 +568,7 @@
 				$auxGravable=round($auxGravable,2);
 			
 			
-			$sql_updateFactura="update factura set excento=".$auxExcento.", gravable=".$auxGravable.", subtotal=".$auxSubTotal.", totaliva=".$auxTotalIva.", montototal=".$auxMontoTotal." where idfactura='".$last_record[0]."';";
+			$sql_updateFactura="update factura set excento=".number_format(round($auxExcento,2),2,'.','').", gravable=".number_format(round($auxGravable,2),2,'.','').", subtotal=".number_format(round($auxSubTotal,2),2,'.','').", totaliva=".number_format(round($auxTotalIva,2),2,'.','').", montototal=".number_format(round($auxMontoTotal,2),2,'.','')." where idfactura='".$last_record[0]."';";
 			$result_updateFactura=pg_exec($con,$sql_updateFactura);
 			
 			$sql_updateControl="update control set factura='".($control[1]+1)."' where idcontrol=1;";
@@ -469,100 +583,60 @@
 			$precioDiferencia=pg_fetch_array($result_precioDiferencia,0);
 			
 			
-			echo "la diferencia entre la venta y la factura es de: ".$montoTotal." - ".$auxMontoTotal.": ".($montoTotal-$auxMontoTotal);
-			echo "</br>Son ".round((($montoTotal-$auxMontoTotal)/$precioDiferencia[4]),2)." Kgs y ".round(((($montoTotal-$auxMontoTotal)/$precioDiferencia[4])/$proDiferencia[7]),0)." unidades ";
+			//echo "la diferencia entre la venta y la factura es de: ".$montoTotal." - ".$auxMontoTotal.": ".($montoTotal-$auxMontoTotal);
+			//echo "</br>Son ".round((($montoTotal-$auxMontoTotal)/$precioDiferencia[4]),2)." Kgs y ".round(((($montoTotal-$auxMontoTotal)/$precioDiferencia[4])/$proDiferencia[7]),0)." unidades ";
 			
 			
-			if(($montoTotal-$auxMontoTotal)>0){			
-				$sql_inserProductoFactura="insert into productosxfactura values(nextval('productosxfactura_idproductosxfactura_seq'),".$control[2].",".$last_record[0].",".number_format(round(((($montoTotal-$auxMontoTotal)/$precioDiferencia[4])/$proDiferencia[7]),0),2,'.','').",".round((($montoTotal-$auxMontoTotal)/$precioDiferencia[4]),2).",".number_format(round($precioDiferencia[4],2),2,'.','').",".round((($montoTotal-$auxMontoTotal)/$precioDiferencia[4])*($precioDiferencia[4]),2).",'0.00',".round((($montoTotal-$auxMontoTotal)/$precioDiferencia[4])*($precioDiferencia[4]),2).")";
-				$result_inserProductoFactura=pg_exec($con,$sql_inserProductoFactura);
+			if(($montoTotal-$auxMontoTotal)>0){		
+				
+				if(($montoTotal-$auxMontoTotal)>$control[3]){ /*Diferencia mayor que el limite sale por queso telita*/		
+					$sql_inserProductoFactura="insert into productosxfactura values(nextval('productosxfactura_idproductosxfactura_seq'),".$control[2].",".$last_record[0].",".number_format(round(((($montoTotal-$auxMontoTotal)/$precioDiferencia[4])/$proDiferencia[7]),0),2,'.','').",".round((($montoTotal-$auxMontoTotal)/$precioDiferencia[4]),2).",".number_format(round($precioDiferencia[4],2),2,'.','').",".round((($montoTotal-$auxMontoTotal)/$precioDiferencia[4])*($precioDiferencia[4]),2).",'0.00',".round((($montoTotal-$auxMontoTotal)/$precioDiferencia[4])*($precioDiferencia[4]),2).")";
+					$result_inserProductoFactura=pg_exec($con,$sql_inserProductoFactura);
 			
-				$auxExcento=$auxExcento+round((($montoTotal-$auxMontoTotal)/$precioDiferencia[4])*($precioDiferencia[4]),2);
-				$auxExcento=round($auxExcento,2);
-				$auxSubTotal=round(($auxGravable+$auxExcento),2);
-				$auxTotalIva=round(($auxGravable*0.12),2);	
-				$auxMontoTotal=round(($auxSubTotal+$auxTotalIva),2);
+					$auxExcento=$auxExcento+round((($montoTotal-$auxMontoTotal)/$precioDiferencia[4])*($precioDiferencia[4]),2);
+					$auxExcento=round($auxExcento,2);
+					$auxSubTotal=round(($auxGravable+$auxExcento),2);
+					$auxTotalIva=round(($auxGravable*0.12),2);	
+					$auxMontoTotal=round(($auxSubTotal+$auxTotalIva),2);
 			
-				$sql_updateFactura="update factura set excento=".number_format(round($auxExcento,2),2,'.','').", gravable=".number_format(round($auxGravable,2),2,'.','').", subtotal=".number_format(round($auxSubTotal,2),2,'.','').", totaliva=".number_format(round($auxTotalIva,2),2,'.','').", montototal=".number_format(round($auxMontoTotal,2),2,'.','')." where idfactura='".$last_record[0]."';";
-				$result_updateFactura=pg_exec($con,$sql_updateFactura);				
+					$sql_updateFactura="update factura set excento=".number_format(round($auxExcento,2),2,'.','').", gravable=".number_format(round($auxGravable,2),2,'.','').", subtotal=".number_format(round($auxSubTotal,2),2,'.','').", totaliva=".number_format(round($auxTotalIva,2),2,'.','').", montototal=".number_format(round($auxMontoTotal,2),2,'.','')." where idfactura='".$last_record[0]."';";
+					$result_updateFactura=pg_exec($con,$sql_updateFactura);
+						
+				}else{ /*Diferencia menor que el limite sale por cadena en frio*/
+					
+					$sql_control="select * from control";
+					$result_control=pg_exec($con,$sql_control);
+					$control=pg_fetch_array($result_control,0);	
+				
+					$sql_last_record="select last_value from venta_idventa_seq;";
+					$result_last_record=pg_exec($con,$sql_last_record);
+					$last_record=pg_fetch_array($result_last_record,0);								
+			
+					$sql_insertCadena="insert into facturacadena values(nextval('facturacadena_idfacturacadena_seq'),'".($control[1])."','".$last_record[0]."','0.00','".number_format(round((($montoTotal-$auxMontoTotal)/1.12),2),2,'.','')."','".number_format(round((($montoTotal-$auxMontoTotal)/1.12),2),2,'.','')."','".number_format(round(((($montoTotal-$auxMontoTotal)/1.12)*0.12)),2,'.','')."','".number_format(round(($montoTotal-$auxMontoTotal),2),2,'.','')."')";
+					$result_insertCadena=pg_exec($con,$sql_insertCadena);
+				
+					$sql_updateControl="update control set factura='".($control[1]+1)."' where idcontrol=1;";
+					$result_updateControl=pg_exec($con,$sql_updateControl);	
+					
+					$sql_last_record="select last_value from venta_idventa_seq;";
+					$result_last_record=pg_exec($con,$sql_last_record);
+					$last_record=pg_fetch_array($result_last_record,0);	
+										
+					$sql_updateVenta="update venta set tipoventa=4 where idventa=".$last_record[0].";";
+					$result_updateVenta=pg_exec($con,$sql_updateVenta);
+																			
+				}								
 			}
 			
+			?>            	
+            	<script type="text/javascript" language="javascript">
+					alert("Venta Registrada Satisfactoriamente.");
+					location.href="../../sistema/FacturarVenta.php";
+				</script>            
+            <?			
 																		
 		}
-		
-		if($_POST["tipoVenta"]==4){ /*Registro de factura con precio legal y diferencia en mantenimiento de cadena en frio*/
-			
-			$sql_insertFactura="insert into factura values(nextval('factura_idfactura_seq'),".$control[1].",".$last_record[0].",".$excento.",".$gravables.",".$subtotal.",".$totalIva.",".$montoTotal.")";
-			$result_insertFactura=pg_exec($con,$sql_insertFactura);
-			
-			$sql_last_record="select last_value from factura_idfactura_seq;";
-			$result_last_record=pg_exec($con,$sql_last_record);
-			$last_record=pg_fetch_array($result_last_record,0);			
-			
-			$lisPro = explode("-",$listaProductos);
-			$prePro = explode("-",$preciosProductos);
-			$impuestos = explode("-",$impuestoProductos);
-			$auxPro= 0;
-			$auxExcento=0;
-			$auxGravable=0;
-			$auxSubTotal=0;
-			$auxTotalIva=0;
-			$auxMontoTotal=0;
-			
-			for($i=0;$i<(sizeof($productos)-1);$i++){
-								
-				for($j=0;$j<(sizeof($lisPro)-1);$j++){
-					if($lisPro[$j]==$productos[$i]){
-						$auxPro=$j;
-						break;
-					}
-				}
 				
-				$montoIva=0;
-				if($impuestos[$auxPro]=="t"){
-					$montoIva=12.00;
-				}else{
-					$montoIva=0.00;
-				}						
-								
-				$auxSubTotalItem=round($prePro[$auxPro]*$_POST["kilogramos".$productos[$i]],2);
-				$auxtotalItem=$auxSubTotalItem+($auxSubTotalItem*($montoIva/100));
-				if($montoIva==12.00){
-					$auxGravable+=$auxSubTotalItem;
-				}else{
-					$auxExcento+=$auxSubTotalItem;
-				}	
-
-				
-				$sql_inserProductoFactura="insert into productosxfactura values(nextval('productosxfactura_idproductosxfactura_seq'),".$productos[$i].",".$last_record[0].",".number_format(round($_POST["unidades".$productos[$i]],2),2,'.','').",".number_format(round($_POST["kilogramos".$productos[$i]],2),2,'.','').",".number_format(round($prePro[$auxPro],2),2,'.','').",".number_format(round($auxSubTotalItem,2),2,'.','').",".number_format(round($montoIva,2),2,'.','').",".number_format(round($auxtotalItem,2),2,'.','').")";
-				$result_inserProductoFactura=pg_exec($con,$sql_inserProductoFactura);
-			}
-			
-				$auxSubTotal=round(($auxGravable+$auxExcento),2);
-				$auxTotalIva=round(($auxGravable*0.12),2);	
-				$auxMontoTotal=round(($auxSubTotal+$auxTotalIva),2);			
-			
-				$auxExcento=round($auxExcento,2);
-				$auxGravable=round($auxGravable,2);
-			
-			
-			$sql_updateFactura="update factura set excento=".number_format(round($auxExcento,2),2,'.','').", gravable=".number_format(round($auxGravable,2),2,'.','').", subtotal=".number_format(round($auxSubTotal,2),2,'.','').", totaliva=".number_format(round($auxTotalIva,2),2,'.','').", montototal=".number_format(round($auxMontoTotal,2),2,'.','')." where idfactura='".$last_record[0]."';";
-			$result_updateFactura=pg_exec($con,$sql_updateFactura);
-			
-			$sql_updateControl="update control set factura='".($control[1]+1)."' where idcontrol=1;";
-			$result_updateControl=pg_exec($con,$sql_updateControl);										
-			echo "la diferencia entre la venta y la factura es de: ".$montoTotal." - ".$auxMontoTotal.": ".($montoTotal-$auxMontoTotal);
-			
-			if(($montoTotal-$auxMontoTotal)>0){
-			
-				$sql_insertCadena="insert into facturacadena values(nextval('facturacadena_idfacturacadena_seq'),'".($control[1]+1)."','".$last_record[0]."','0.00','".number_format(round((($montoTotal-$auxMontoTotal)/1.12),2),2,'.','')."','".number_format(round((($montoTotal-$auxMontoTotal)/1.12),2),2,'.','')."','".number_format(round(((($montoTotal-$auxMontoTotal)/1.12)*0.12)),2,'.','')."','".number_format(round(($montoTotal-$auxMontoTotal),2),2,'.','')."')";
-				$result_insertCadena=pg_exec($con,$sql_insertCadena);
-			
-			}
-																	
-		}
-		
-		
 	}
 
 ?>

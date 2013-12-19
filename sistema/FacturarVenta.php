@@ -230,41 +230,7 @@
             <div class="Reporte-flecha_der" onclick="adelante_resumen_ventas()"><img src="../recursos/imagenes/next.png" style="margin-right:2px; margin-top:7px;" width="6" height="10" /></div>
         </div>
         
-        <div id="reporte" class="contenedor_ventas" style="float:left; width:100%;">
-
-        
-
-        
-      <!--<div class="venta">
-        	<div class="venta_fecha" >
-            	<div class="linea_fecha_dia">21NOV2013</div>
-            </div>
-            <div class="venta_describe">
-            	<div class="linea_describe">GLORIA URREA</div>
-        </div>
-            <div class="venta_detalle">
-				<div class="detalle">
-                	<div class="detalle_arriba">22300.12</div>
-                    <div class="detalle_abajo">EXCENTO</div>
-                </div>
-				<div class="detalle">
-                	<div class="detalle_arriba">4100.00</div>
-                    <div class="detalle_abajo">GRAVABLE</div>
-                </div>
-				<div class="detalle">
-                	<div class="detalle_arriba">27300.12</div>
-                    <div class="detalle_abajo">SUB TOTAL</div>
-                </div>
-				<div class="detalle">
-                	<div class="detalle_arriba">492.00</div>
-                    <div class="detalle_abajo">TOTAL IVA</div>
-                </div>
-				<div class="detalle" style="border-right:0px;">
-                	<div class="detalle_arriba" >27792.12</div>
-                    <div class="detalle_abajo">MONTO TOTAL</div>
-                </div>                                                                
-            </div>
-        </div>-->        
+        <div id="reporte" class="contenedor_ventas" style="float:left; width:100%;">                        
         
        		<?php 
 			    $con=Conectarse();
@@ -322,7 +288,7 @@
 					}if($venta[3]==4){
 			            echo"<a href='../reportes/notaDeEntrega.php?idventa=".$venta[0]."'><div class='venta_generar' title='Nota de Entrega'>NE</div></a>";
 			            echo"<a href='../reportes/FacturaVenta.php?idventa=".$venta[0]."'><div class='venta_generar' title='Factura'>FA</div></a>";
-			            echo"<div class='venta_generar' title='Cadena en Frio' style='border-right:0px;'>CF</div>";						
+			            echo"<a href='../reportes/FacturaCadenaEnFrio.php?idventa=".$venta[0]."'><div class='venta_generar' title='Cadena en Frio' style='border-right:0px;'>CF</div></a>";						
 					}
 			        echo"</div>";
 				}

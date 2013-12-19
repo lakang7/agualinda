@@ -151,19 +151,26 @@
 			<ul>
                 <li><a href="../sistema/Clientes.php" ><img src="../recursos/imagenes/file.gif" /> Clientes</a></li>
                 <li><a href="../sistema/EntidadesBancarias.php" ><img src="../recursos/imagenes/file.gif" /> Entidades Bancarias</a></li>
+                <li><a href="../sistema/CuentasBancarias.php" ><img src="../recursos/imagenes/file.gif" /> Cuentas Bancarias</a></li>
 			</ul>
 		</li> 
 		<li><img src="../recursos/imagenes/folder.gif" /> Ventas</span>
 			<ul>
                 <li><a href="../sistema/Venta.php" ><img src="../recursos/imagenes/file.gif" /> Realizar Venta</a></li> 
-                <li><a href="../sistema/FacturarVenta.php" ><img src="../recursos/imagenes/file.gif" /> Facturar Venta</a></li>               
-			</ul>
-		</li>                 
+                <li><a href="../sistema/FacturarVenta.php" ><img src="../recursos/imagenes/file.gif" /> Facturar Venta</a></li>
+            </ul>
+		</li>      
+		<li><img src="../recursos/imagenes/folder.gif" /> Cuentas Por Cobrar</span>
+			<ul>
+                <li><a href="../sistema/CuentasporCobrar.php" ><img src="../recursos/imagenes/file.gif" /> Cuentas por Cobrar</a></li>
+                <li><a href="../sistema/AbonoCuentaPorCobrar.php" ><img src="../recursos/imagenes/file.gif" /> Abono Cuentas por Cobrar</a></li>
+            </ul>
+		</li>                        
 		<li><img src="../recursos/imagenes/folder.gif" /> Reportes</span>
 			<ul>
                 <li><a href="../reportes/ReporteResumenRutasDeleche.php" ><img src="../recursos/imagenes/file.gif" /> Resumen Semanal Rutas y Productores</a></li>
                 <li><a href="../reportes/ReporteResumenProduccionDiaria.php" ><img src="../recursos/imagenes/file.gif" /> Resumen Producción Diaria</a></li>                
-                
+                <li><a href="../reportes/ReporteResumenEntradasySalidasCuartoFrio.php" ><img src="../recursos/imagenes/file.gif" />Resumen Entradas y Salidas Diaria</a></li>
 			</ul>
 		</li>               
 	</ul>
