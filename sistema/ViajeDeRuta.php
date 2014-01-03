@@ -189,8 +189,8 @@
     </div>
     <div class="menu" id="menu">
     	<?php menu_interno(); ?>
-    </div>
-	<div class="cuerpo" id="cuerpo">
+    </div> 
+	<div class="cuerpo" id="cuerpo" style="height:750px;">
     	 
         <form name="formularioviaje" id="formularioviaje" method="post" action="../recursos/funciones/ajaxviajesruta.php?action=3">
         <input type="hidden" name="accion" id="accion" value="1" />
@@ -255,7 +255,7 @@
 		   alert("Debe seleccionar primero una ruta.");	   
 	   }else{
 		  $("#actualiza").load("../recursos/funciones/ajaxviajesruta.php", {action: 1, fecha:document.getElementById("fecha").value, ruta:document.getElementById("rutas").value},function(){
-			  ajustar();
+			 // ajustar();
 			  $("#productores").chosen({no_results_text: "No se han encontrado resultados para: "});
  			  $("input[type=button]").button()
               .click(function( event ) {

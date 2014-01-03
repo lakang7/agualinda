@@ -248,19 +248,95 @@
 		if(document.getElementById("tipoPago").value==1){/*Efectivo*/		
 			$("#actualiza").load("../recursos/funciones/ajaxAbono.php", {action: 1},function(){
 				$("#banco").chosen({no_results_text: "No se han encontrado resultados para: "});
-				$("#cuenta").chosen({no_results_text: "No se han encontrado resultados para: "});				
+				$("#cuenta").chosen({no_results_text: "No se han encontrado resultados para: "});
+				
+				$(document).ready(function(){ 
+					$("#monto").keydown(function(event) {
+					   if(event.shiftKey)
+					   {
+					        event.preventDefault();
+					   }
+			 
+					   if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 190  || event.keyCode == 9)    {
+					   }
+					   else {
+					        if (event.keyCode < 95) {
+					          if (event.keyCode < 48 || event.keyCode > 57) {
+					                event.preventDefault();
+					          }
+				        } 
+				        else {
+				              if (event.keyCode < 96 || event.keyCode > 105) {
+				                  event.preventDefault();
+			              }
+				        }
+				      }
+				   });
+				});					
+				
+								
 			});
 		}													
 		if(document.getElementById("tipoPago").value==2){/*Deposito*/
 			$("#actualiza").load("../recursos/funciones/ajaxAbono.php", {action: 2},function(){
 				$("#banco").chosen({no_results_text: "No se han encontrado resultados para: "});
-				$("#cuenta").chosen({no_results_text: "No se han encontrado resultados para: "});	
+				$("#cuenta").chosen({no_results_text: "No se han encontrado resultados para: "});
+				
+				$(document).ready(function(){ 
+					$("#monto").keydown(function(event) {
+					   if(event.shiftKey)
+					   {
+					        event.preventDefault();
+					   }
+			 
+					   if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 190 || event.keyCode == 9)    {
+					   }
+					   else {
+					        if (event.keyCode < 95) {
+					          if (event.keyCode < 48 || event.keyCode > 57) {
+					                event.preventDefault();
+					          }
+				        } 
+				        else {
+				              if (event.keyCode < 96 || event.keyCode > 105) {
+				                  event.preventDefault();
+			              }
+				        }
+				      }
+				   });
+				});					
+					
 			});			
 		}
 		if(document.getElementById("tipoPago").value==3 || document.getElementById("tipoPago").value==4){/*Transferencia o Cheque*/
 			$("#actualiza").load("../recursos/funciones/ajaxAbono.php", {action: 3},function(){
 				$("#banco").chosen({no_results_text: "No se han encontrado resultados para: "});
-				$("#cuenta").chosen({no_results_text: "No se han encontrado resultados para: "});	
+				$("#cuenta").chosen({no_results_text: "No se han encontrado resultados para: "});
+				
+				$(document).ready(function(){ 
+					$("#monto").keydown(function(event) {
+					   if(event.shiftKey)
+					   {
+					        event.preventDefault();
+					   }
+			 
+					   if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 190 || event.keyCode == 9)    {
+					   }
+					   else {
+					        if (event.keyCode < 95) {
+					          if (event.keyCode < 48 || event.keyCode > 57) {
+					                event.preventDefault();
+					          }
+				        } 
+				        else {
+				              if (event.keyCode < 96 || event.keyCode > 105) {
+				                  event.preventDefault();
+			              }
+				        }
+				      }
+				   });
+				});					
+					
 			});			 
 		}
 						
@@ -277,13 +353,21 @@
 				alert("Debe indicar el tipo de pago que se esta registrando.");
 				band=1;
 			}
-		
-			
+					
 			if(document.getElementById("tipoPago").value==1 && band==0){
+				
 				if(document.getElementById("monto").value==0 && band==0){
 					alert("Debe indicar el monto del pago.");
 					band=1;
-				}				
+				}		
+				
+				if(document.getElementById("monto").value!="" && band==0){
+					numcheck = /^(?:\d*\.\d{1,2}|\d+)$/;			
+					if(numcheck.test(document.getElementById("monto").value)==false && band==0){
+						alert("El monto no cumple con el formato requerido debe ser un número y los decimales indicados con punto.");
+						band=1;				
+					}
+				}
 			}
 			
 			if(document.getElementById("tipoPago").value==2 && band==0){
@@ -296,6 +380,14 @@
 				if(document.getElementById("monto").value==0 && band==0){
 					alert("Debe indicar el monto del pago.");
 					band=1;
+				}
+				
+				if(document.getElementById("monto").value!="" && band==0){
+					numcheck = /^(?:\d*\.\d{1,2}|\d+)$/;			
+					if(numcheck.test(document.getElementById("monto").value)==false && band==0){
+						alert("El monto no cumple con el formato requerido debe ser un número y los decimales indicados con punto.");
+						band=1;				
+					}
 				}
 				
 				if(document.getElementById("identificador").value==0 && band==0){
@@ -321,6 +413,15 @@
 					band=1;
 				}
 				
+				if(document.getElementById("monto").value!="" && band==0){				
+					numcheck = /^(?:\d*\.\d{1,2}|\d+)$/;			
+					if(numcheck.test(document.getElementById("monto").value)==false && band==0){
+						alert("El monto no cumple con el formato requerido debe ser un número y los decimales indicados con punto.");
+						band=1;				
+					}				
+				}
+				
+				
 				if(document.getElementById("identificador").value==0 && band==0){
 					alert("Debe indicar el identificador del deposito que se realizo.");
 					band=1;
@@ -333,7 +434,7 @@
 			}	
 			
 			if(band==0){
-				$("#actualizadeudas").load("../recursos/funciones/ajaxAbono.php", {action: 4,cliente:document.getElementById("nombreCliente").value},function(){
+				$("#actualizadeudas").load("../recursos/funciones/ajaxAbono.php", {action: 4,cliente:document.getElementById("nombreCliente").value,monto:document.getElementById("monto").value},function(){
 					ajustar();
 					
 				  	$(function() {
@@ -399,7 +500,7 @@
 		        event.preventDefault();
 		   }
 		 
-		   if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 190)    {
+		   if (event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 190 || event.keyCode == 9)    {
 		   }
 		   else {
 		        if (event.keyCode < 95) {

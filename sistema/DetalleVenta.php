@@ -14,7 +14,7 @@
 
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Detalle Cuentas Por Cobrar</title>
+<title>Detalle Venta</title>
 <style>
 	.linea_titulo{
 		float:left;
@@ -101,15 +101,28 @@
 	</div>
     <div class="barra2">
     	<div class="barra2_flecha"></div>                
-        <div class="barra2_pantalla">Detalle Cuentas Por Cobrar</div>
+        <div class="barra2_pantalla">Detalle Venta</div>
     </div>
     <div class="menu" id="menu">
     	<?php menu_interno(); ?>
     </div>
 	<div class="cuerpo" id="cuerpo">
     	<?php
-			$con=Conectarse();			
-			$sql_detalle="select cuentaporcobrar.idcuentaporcobrar, venta.idventa, cliente.idcliente, cliente.nombre, ubicacion.idubicacion, ubicacion.ciudad, venta.tipoventa, venta.tipopago, tipoprecio.idtipoprecio, tipoprecio.descripcion, cuentaporcobrar.montototal, cuentaporcobrar.cancelado, cuentaporcobrar.restante, cuentaporcobrar.estatus, venta.fecha, ((cuentaporcobrar.cancelado*100)/cuentaporcobrar.montototal) as porcentaje from tipoprecio, ubicacion, cuentaporcobrar, cliente, venta where cuentaporcobrar.idventa = venta.idventa and venta.idcliente = cliente.idcliente and venta.idubicacion = ubicacion.idubicacion and tipoprecio.idtipoprecio = venta.tipoprecio and cuentaporcobrar.idcuentaporcobrar='".$_GET["id"]."';";	
+			$con=Conectarse();	
+			$sql_venta="select * from venta where idventa='".$_GET["id"]."'";
+			$result_venta=pg_exec($con,$sql_venta);
+			$venta=pg_fetch_array($result_venta,0);
+			
+			$sql_detalle="";
+			if($venta[4]==2){
+				$sql_detalle="select cuentaporcobrar.idcuentaporcobrar, venta.idventa, cliente.idcliente, cliente.nombre, ubicacion.idubicacion, ubicacion.ciudad, venta.tipoventa, venta.tipopago, tipoprecio.idtipoprecio, tipoprecio.descripcion, cuentaporcobrar.montototal, cuentaporcobrar.cancelado, cuentaporcobrar.restante, cuentaporcobrar.estatus, venta.fecha, ((cuentaporcobrar.cancelado*100)/cuentaporcobrar.montototal) as porcentaje from tipoprecio, ubicacion, cuentaporcobrar, cliente, venta where cuentaporcobrar.idventa = venta.idventa and venta.idcliente = cliente.idcliente and venta.idubicacion = ubicacion.idubicacion and tipoprecio.idtipoprecio = venta.tipoprecio and venta.idventa='".$_GET["id"]."';";				
+			}else{
+				$sql_detalle="select venta.idventa, cliente.idcliente, cliente.nombre, ubicacion.idubicacion, ubicacion.ciudad, venta.tipoventa, venta.tipopago, tipoprecio.idtipoprecio, tipoprecio.descripcion, venta.fecha, venta.montototal from tipoprecio, ubicacion, cliente, venta where venta.idcliente = cliente.idcliente and venta.idubicacion = ubicacion.idubicacion and tipoprecio.idtipoprecio = venta.tipoprecio and venta.idventa='".$_GET["id"]."';";								
+			}
+			
+					
+			
+			//echo $sql_detalle;	
 			$result_detalle=pg_exec($con,$sql_detalle);
 			$detalle=pg_fetch_array($result_detalle,0);		
 		
@@ -132,13 +145,13 @@
         
 		<?php 
 			if($atras!=""){
-				echo "<div class='atras'><a href='DetalleCuentaPorCobrar.php?id=".$atras."' style='text-decoration:none; color:#333'>Anterior</a></div>";			
+				echo "<div class='atras'><a href='DetalleVenta.php?id=".$atras."' style='text-decoration:none; color:#333'>Anterior</a></div>";			
 			}else{
 				echo "<div class='atras'>Anterior</div>";	
 			}
 			
 			if($adelante!=""){
-				echo "<div class='adelante'><a href='DetalleCuentaPorCobrar.php?id=".$adelante."' style='text-decoration:none; color:#333'>Siguiente</a></div>";
+				echo "<div class='adelante'><a href='DetalleVenta.php?id=".$adelante."' style='text-decoration:none; color:#333'>Siguiente</a></div>";
 			}else{
 				echo "<div class='adelante'>Siguiente</div>";
 			}
@@ -149,10 +162,22 @@
                 
  		<div class="linea_titulo" style="margin-top:30px;">Detalle de La Venta</div>
         <div class="linea" >
-        	<div class="linea_columna" style="width:13%">Fecha: <?php echo substr($detalle[14],0,10) ?></div>
-            <div class="linea_columna" style="width:33%">Cliente: <?php echo $detalle[3]; ?></div>
-            <div class="linea_columna" style="width:32%">Ubicación: <?php echo $detalle[5]; ?></div>
-            <div class="linea_columna" style="width:19%; border-right:0px;">Tipo Precio: <?php echo $detalle[9]; ?></div>
+		<?php 
+		if($venta[4]==2){
+        	echo "<div class='linea_columna' style='width:13%'>Fecha: ".substr($detalle[14],0,10)."</div>";
+            echo "<div class='linea_columna' style='width:33%'>Cliente: ".$detalle[3]."</div>";
+            echo "<div class='linea_columna' style='width:32%'>Ubicación: ".$detalle[5]."</div>";
+            echo "<div class='linea_columna' style='width:19%; border-right:0px;'>Tipo Precio: ".$detalle[9]."</div>";
+		}else if($venta[4]==1){
+        	echo "<div class='linea_columna' style='width:13%'>Fecha: ".substr($detalle[9],0,10)."</div>";
+            echo "<div class='linea_columna' style='width:33%'>Cliente: ".$detalle[2]."</div>";
+            echo "<div class='linea_columna' style='width:32%'>Ubicación: ".$detalle[4]."</div>";
+            echo "<div class='linea_columna' style='width:19%; border-right:0px;'>Tipo Precio: ".$detalle[8]."</div>";						
+		}
+		
+		
+		?>        
+
         </div>
         <div class="linea_titulo" style="padding-left:0px; width:96%; margin-top:20px;">
         	<div class="linea_columna" style="width:8%; text-align:center">Codigo</div>
@@ -171,7 +196,15 @@
         </div>
         
         <?
-	$sql_productosxVenta="select * from productosxventa where idventa='".$detalle[1]."'";
+	$sql_productosxVenta="";
+	
+	if($venta[4]==2){
+		$sql_productosxVenta="select * from productosxventa where idventa='".$detalle[1]."'";
+	}else if($venta[4]==1){
+		$sql_productosxVenta="select * from productosxventa where idventa='".$detalle[0]."'";
+	}
+	
+	
 	$result_productosxventa=pg_exec($con,$sql_productosxVenta);
 	for($i=0;$i<pg_num_rows($result_productosxventa);$i++){
 		$producto_venta=pg_fetch_array($result_productosxventa,$i);
@@ -204,7 +237,13 @@
 	?> 
     <div class="linea">
     	<?php
-			$sql_detalleVenta="select * from venta where idventa='".$detalle[1]."'";
+			$sql_detalleVenta="";
+			if($venta[4]==2){
+				$sql_detalleVenta="select * from venta where idventa='".$detalle[1]."'";	
+			}else if($venta[4]==1){
+				$sql_detalleVenta="select * from venta where idventa='".$detalle[0]."'";
+			}
+			
 			$result_detalleVenta=pg_exec($con,$sql_detalleVenta);
 			$detalleVenta=pg_fetch_array($result_detalleVenta,0);								
 		?>
@@ -250,10 +289,21 @@
     
     <div class="linea_titulo" style="margin-top:20px;">Detalle de La Cuenta por Cobrar</div>   
     <div class="linea" >
-        <div class="linea_columna" style="width:20%">Monto Total: <?php echo $detalle[10] ?></div>
-        <div class="linea_columna" style="width:20%">Monto Cancelado: <?php echo $detalle[11]; ?></div>
-        <div class="linea_columna" style="width:20%">Monto Restante: <?php echo $detalle[12]; ?></div>
-        <div class="linea_columna" style="width:19%; border-right:0px;">Porcentaje Cancelado: <?php echo round($detalle[15],2)." %"; ?></div>
+    	<?php
+			if($venta[4]==2){
+		        echo "<div class='linea_columna' style='width:20%'>Monto Total: ".$detalle[10]."</div>";
+		        echo "<div class='linea_columna' style='width:20%'>Monto Cancelado: ".$detalle[11]."</div>";
+        		echo "<div class='linea_columna' style='width:20%'>Monto Restante: ".$detalle[12]."</div>";
+		        echo "<div class='linea_columna' style='width:19%; border-right:0px;'>Porcentaje Cancelado: ".round($detalle[15],2)." %"."</div>";			
+			}else if($venta[4]==1){
+		        echo "<div class='linea_columna' style='width:20%'>Monto Total: ".$detalle[10]."</div>";
+		        echo "<div class='linea_columna' style='width:20%'>Monto Cancelado: ".$detalle[10]."</div>";
+        		echo "<div class='linea_columna' style='width:20%'>Monto Restante: 0.00</div>";
+		        echo "<div class='linea_columna' style='width:19%; border-right:0px;'>Porcentaje Cancelado: 100 %</div>";								
+			}
+		
+		?>
+
     </div>
 
         <div class="linea_titulo" style="padding-left:0px; width:96%; margin-top:20px;">
@@ -268,7 +318,15 @@
         
         <?php
 			$con=Conectarse();
-			$sql_selectAbono="select * from abono where idcuentaporcobrar='".$_GET["id"]."'";
+			
+			
+			if($venta[4]==2){
+			
+			$sql_cuentaporcobrar="select * from cuentaporcobrar where idventa='".$_GET["id"]."'";
+			$result_cuentaporcobrar=pg_exec($con,$sql_cuentaporcobrar);
+			$cuentaporcobrar=pg_fetch_array($result_cuentaporcobrar,0);
+							
+			$sql_selectAbono="select * from abono where idcuentaporcobrar='".$cuentaporcobrar[0]."'";
 			$result_selectAbono=pg_exec($con,$sql_selectAbono);
 			for($i=0;$i<pg_num_rows($result_selectAbono);$i++){
 				$abono=pg_fetch_array($result_selectAbono,$i);
@@ -313,14 +371,31 @@
 					echo "<div class='linea_columna' style='width:22%; text-align:center'>".$banco[1]."</div>";
 					echo "<div class='linea_columna' style='width:23%; text-align:center' title='".$bancoCuenta[1]."'>".$cuenta[4]."</div>";
 				}												
-            	
-	            
-	        	
+            		            	        	
 	            echo "<div class='linea_columna' style='width:10%; text-align:center'>".$detallePago[7]."</div>";
 	            echo "<div class='linea_columna' style='width:9%; text-align:right; padding-left:0%; padding-right:0.5%'>".number_format(round($detallePago[6],2),2,'.','')."</div>";
 	        	echo "<div class='linea_columna' style='width:9%; text-align:right; padding-left:0%; padding-right:0.5%; border-right:0px'>".number_format(round($abono[3],2),2,'.','')."</div>";
 				echo "</div>";
 			}
+			}else if($venta[4]==1){
+				
+				echo "<div class='linea'>";
+				echo "<div class='linea_columna' style='width:10%; text-align:center'>".substr($detalle[9],0,10)."</div>";		
+				echo "<div class='linea_columna' style='width:12.5%; text-align:center'>Efectivo</div>";
+				echo "<div class='linea_columna' style='width:22%; text-align:center'></div>";
+				echo "<div class='linea_columna' style='width:23%; text-align:center'></div>";											            	echo "<div class='linea_columna' style='width:10%; text-align:center'></div>";
+	            echo "<div class='linea_columna' style='width:9%; text-align:right; padding-left:0%; padding-right:0.5%'>".number_format(round($detalle[10],2),2,'.','')."</div>";
+	        	echo "<div class='linea_columna' style='width:9%; text-align:right; padding-left:0%; padding-right:0.5%; border-right:0px'>".number_format(round($detalle[10],2),2,'.','')."</div>";
+				echo "</div>";				
+				
+			}	
+			
+			
+			
+			
+			
+			
+			
 		?>
         	        
               

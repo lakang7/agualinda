@@ -254,7 +254,7 @@
 			$result_detalleCuenta=pg_exec($con,$sql_detalleCuenta);
 			$detalleCuenta=pg_fetch_array($result_detalleCuenta,0);
 			$sql_updateCuenta="";
-			if(($detalleCuenta[2]-($detalleCuenta[3]+$_POST["abono".$listaCuentas[$i]]))==0){ /*pago completo de la deuda*/
+			if(($detalleCuenta[2]-($detalleCuenta[3]+$_POST["abono".$listaCuentas[$i]]))<=0){ /*pago completo de la deuda*/
 				$sql_updateCuenta="update cuentaporcobrar set cancelado='".($detalleCuenta[3]+$_POST["abono".$listaCuentas[$i]])."', restante='".($detalleCuenta[2]-($detalleCuenta[3]+$_POST["abono".$listaCuentas[$i]]))."', estatus=3 where idcuentaporcobrar='".$detalleCuenta[0]."'";
 			}else{/*Pago parcial*/
 				$sql_updateCuenta="update cuentaporcobrar set cancelado='".($detalleCuenta[3]+$_POST["abono".$listaCuentas[$i]])."', restante='".($detalleCuenta[2]-($detalleCuenta[3]+$_POST["abono".$listaCuentas[$i]]))."', estatus=2 where idcuentaporcobrar='".$detalleCuenta[0]."'";

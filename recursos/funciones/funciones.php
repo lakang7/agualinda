@@ -158,8 +158,16 @@
 			<ul>
                 <li><a href="../sistema/Venta.php" ><img src="../recursos/imagenes/file.gif" /> Realizar Venta</a></li> 
                 <li><a href="../sistema/FacturarVenta.php" ><img src="../recursos/imagenes/file.gif" /> Facturar Venta</a></li>
+                <li><a href="../sistema/Ventas.php" ><img src="../recursos/imagenes/file.gif" /> Listado de Ventas</a></li>
             </ul>
-		</li>      
+		</li> 
+		<li><img src="../recursos/imagenes/folder.gif" /> Cuarto Frio</span>
+			<ul>
+                <li><a href="../sistema/Despacho.php" ><img src="../recursos/imagenes/file.gif" /> Despacho</a></li> 
+                <li><a href="../sistema/Recicle.php" ><img src="../recursos/imagenes/file.gif" /> Recicle</a></li>
+                <li><a href="../sistema/Donacion.php" ><img src="../recursos/imagenes/file.gif" /> Donación</a></li>
+            </ul>
+		</li>              
 		<li><img src="../recursos/imagenes/folder.gif" /> Cuentas Por Cobrar</span>
 			<ul>
                 <li><a href="../sistema/CuentasporCobrar.php" ><img src="../recursos/imagenes/file.gif" /> Cuentas por Cobrar</a></li>
@@ -168,9 +176,11 @@
 		</li>                        
 		<li><img src="../recursos/imagenes/folder.gif" /> Reportes</span>
 			<ul>
+            	<li><a href="../reportes/ReporteSemanalProductor.php" ><img src="../recursos/imagenes/file.gif" />Resumen Semanal Productor</a></li>   
                 <li><a href="../reportes/ReporteResumenRutasDeleche.php" ><img src="../recursos/imagenes/file.gif" /> Resumen Semanal Rutas y Productores</a></li>
                 <li><a href="../reportes/ReporteResumenProduccionDiaria.php" ><img src="../recursos/imagenes/file.gif" /> Resumen Producción Diaria</a></li>                
                 <li><a href="../reportes/ReporteResumenEntradasySalidasCuartoFrio.php" ><img src="../recursos/imagenes/file.gif" />Resumen Entradas y Salidas Diaria</a></li>
+                             
 			</ul>
 		</li>               
 	</ul>

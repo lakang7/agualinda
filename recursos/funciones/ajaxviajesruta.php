@@ -230,19 +230,15 @@
 					}else{
 						echo "<td><input type='text' class='entrada_tabla' name='".str_replace(" ","_",$elemento[1])."-".$productor_extra[0]."' id='".str_replace(" ","_",$elemento[1])."-".$productor_extra[0]."' value='' /></td>"; 									
 					}																                       	
-				}				
-				
-				
+				}												
 				echo "</tr>";
 			}
-		}						
-						
-											
+		}																							
 					?>
 
                 </tbody>
             </table>
-           <div class="conte_agregar" id="conte_agregar">
+           <div class="conte_agregar" id="conte_agregar" >
            <select data-placeholder="Seleccione el productor.." name="productores" id="productores" style="width:365px;" class="chzn-select" >
                <option value="0"></option>
                <?php								     

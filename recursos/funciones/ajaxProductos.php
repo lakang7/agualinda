@@ -938,7 +938,35 @@
 		 
 		 
 		 if($precioreal[4]==$_POST["venta3"]){
-		 	/*No Actualizo nada*/
+			 
+			$sql_ciudades="select * from ubicacion order by idubicacion";
+			$result_ciudades=pg_exec($con,$sql_ciudades);
+			$sql_precios="select * from tipoprecio order by idtipoprecio";
+			$result_precios=pg_exec($con,$sql_precios);			
+			echo "llego aqui";
+			for($i=0;$i<pg_num_rows($result_ciudades);$i++){								
+				$ciudad=pg_fetch_array($result_ciudades);
+				for($j=0;$j<pg_num_rows($result_precios);$j++){
+					$precio=pg_fetch_array($result_precios,$j);	
+					$sql_ConsultaPrecioxubicacion=" select * from precioxubicacion where idtipoprecio='".$precio[0]."' and idubicacion='".$ciudad[0]."' and idproducto='".InversaCodigo($_POST["codigo3"])."' and hasta is null and actual='true';";
+					$result_ConsultaPrecioxubicacion=pg_exec($con,$sql_ConsultaPrecioxubicacion);
+					if(pg_num_rows($result_ConsultaPrecioxubicacion)>0){
+						$precioUbicado=pg_fetch_array($result_ConsultaPrecioxubicacion,0);
+						if($_POST["por_".$ciudad[0]."_".$precio[0]]!=$precioUbicado[5]){
+							$sql_updateprecioxubicacion="update precioxubicacion set hasta = now(), actual='false' where idproducto='".InversaCodigo($_POST["codigo3"])."' and idtipoprecio='".$precio[0]."' and idubicacion='".$ciudad[0]."' and hasta is null and actual='true';";
+							$result_updateprecioxubicacion = pg_exec($con,$sql_updateprecioxubicacion);
+							
+							$sql_precioxubicacion=" insert into precioxubicacion values (nextval('precioxubicacion_idprecioxubicacion_seq'),'".InversaCodigo($_POST["codigo3"])."','".$precio[0]."','".$ciudad[0]."','".$_POST["venta3"]."','".$_POST["por_".$ciudad[0]."_".$precio[0]]."','".$_POST["pre_".$ciudad[0]."_".$precio[0]]."',now(),null,true) ";
+							$result_precioxubicacion=pg_exec($con,$sql_precioxubicacion);																																			
+						}
+					}
+				
+				}
+				
+			}
+			
+			
+			
 		 }else{
 			 
 			/*Cierro el precio real de venta actual*/
@@ -968,6 +996,11 @@
 				}								
 			}												
 		 }
+		 
+		 
+		 
+		 
+		 
 		 
 			$listainsumos = explode("-",$_POST["listainsumo"]);
 			for($i=0;$i<(sizeof($listainsumos)-1);$i++){
