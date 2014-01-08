@@ -442,7 +442,10 @@
 				
 		/*-------------------------------------------------------------------------------------------------------*/			
 		
-		
+		if($_GET["despacho"]!="" && $_GET["despacho"]!=NULL){
+			$sql_updateDepacho=" update despacho set estatus='Despachado' where iddespacho='".$_GET["despacho"]."'";
+			$result_updateDespacho=pg_exec($con,$sql_updateDepacho);						
+		}
 		
 		if($_POST["tipoVenta"]==1){
 			?>            	

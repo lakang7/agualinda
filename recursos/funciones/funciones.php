@@ -156,6 +156,7 @@
 		</li> 
 		<li><img src="../recursos/imagenes/folder.gif" /> Ventas</span>
 			<ul>
+            	<li><a href="../sistema/ListaDespachos.php" ><img src="../recursos/imagenes/file.gif" /> Lista De Despachos</a></li>
                 <li><a href="../sistema/Venta.php" ><img src="../recursos/imagenes/file.gif" /> Realizar Venta</a></li> 
                 <li><a href="../sistema/FacturarVenta.php" ><img src="../recursos/imagenes/file.gif" /> Facturar Venta</a></li>
                 <li><a href="../sistema/Ventas.php" ><img src="../recursos/imagenes/file.gif" /> Listado de Ventas</a></li>
@@ -163,7 +164,8 @@
 		</li> 
 		<li><img src="../recursos/imagenes/folder.gif" /> Cuarto Frio</span>
 			<ul>
-                <li><a href="../sistema/Despacho.php" ><img src="../recursos/imagenes/file.gif" /> Despacho</a></li> 
+            	<li><a href="../sistema/Despacho.php" ><img src="../recursos/imagenes/file.gif" />Reportar Despacho</a></li>
+            	<li><a href="../sistema/DespachosPorCliente.php" ><img src="../recursos/imagenes/file.gif" />Despachos Por Cliente</a></li>
                 <li><a href="../sistema/Recicle.php" ><img src="../recursos/imagenes/file.gif" /> Recicle</a></li>
                 <li><a href="../sistema/Donacion.php" ><img src="../recursos/imagenes/file.gif" /> Donación</a></li>
             </ul>
